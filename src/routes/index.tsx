@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 import { tours } from "../data/tours";
+import heroImg from "../assets/hero-savannah.jpg";
+import featureImg from "../assets/feature-nairobi-park.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -43,10 +45,7 @@ function Index() {
         <section className="relative flex h-screen min-h-[600px] w-full items-center justify-center pt-20">
           <div
             className="absolute inset-0 h-full w-full bg-cover bg-center"
-            style={{
-              backgroundImage:
-                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCRExPCasgceKrmupxfk-fWssezreKPKX9IVndodiXTfGxZAgL41lzSWCUab--S1FshMseG_x_1bmJzzhe8XdyzQCoTRZMLsyqD2ifR02nZOX9NZzQY4CLIrqGLcO0PdcTwUbEAWMzJr34oHg4T9ik0AWDVAv4v0uWfb0aE4CaTQNiTVwWUfbEcyTkWKFprwqDE4yYsT2ccHmU3_-Fczpltv7GB75-Ljco-iqs8MvbtdM-OffMusx24')",
-            }}
+            style={{ backgroundImage: `url('${heroImg}')` }}
           />
           <div className="hero-overlay absolute inset-0" />
           <div className="relative z-10 mx-auto flex max-w-[800px] flex-col items-center px-gutter text-center">
@@ -89,8 +88,11 @@ function Index() {
             <div className="relative h-[400px] overflow-hidden rounded-lg border border-deep-forest/10">
               <img
                 className="h-full w-full object-cover"
-                alt="Forest landscape meeting minimalist modern architecture"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR5fG7nxYh9OtklplJtEkqXhXjPmqzhdpOKUdS6oH7DA7VZdJv2VSiIOt2o7FIGPKzQzIBwoNn_mlI_pfli8YDfP6H78RapW1et7dg9z1WuyIBTB_E3Wl8gtA43ya8MZOiuGrP7UcXF1dxVaOE8X0IIc1UvYlPJSZJP97V_iBcS5EYRJYuaROcuC-0JwOOjk5atXicjgQGtqE6bh-1JMqbxJz8VJRMRe9ZbdKYDFqRl8PDP9Nvo0cz"
+                alt="Giraffes grazing in Nairobi National Park with the city skyline behind"
+                src={featureImg}
+                width={1280}
+                height={1024}
+                loading="lazy"
               />
             </div>
           </div>
@@ -123,6 +125,9 @@ function Index() {
                       className="h-full w-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
                       alt={tour.alt}
                       src={tour.image}
+                      width={1024}
+                      height={768}
+                      loading="lazy"
                     />
                     <div className="absolute right-4 top-4 rounded-sm border border-deep-forest/10 bg-surface/90 px-3 py-1 backdrop-blur-sm">
                       <span className="label text-deep-forest">{tour.duration}</span>

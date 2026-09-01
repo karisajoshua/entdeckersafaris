@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
+import duskImg from "../assets/contact-dusk.jpg";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -35,10 +36,7 @@ function Contact() {
       <main className="relative grow pb-section-desktop pt-32">
         <div
           className="pointer-events-none absolute inset-0 z-0 bg-cover bg-center opacity-10"
-          style={{
-            backgroundImage:
-              "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBaUqZ8z8ZDfOh6L4tqUczwJwonFEmi5lbLqObp5LqoyuOyN9NpP7htpQlFlI_IX_eI6pvld2JBFuiZLEeTkSe38WEoE5DSyvlBzvY4upizLPT8cyKLuQR1t95QQk60-lL4aXWUY_XYfnZmpIAtlOJjHQFTE0Rc2RJAxFNQqFyJdCmsVIQt90u_2784bqqrqO-6o1ApBQi4nT1KGkSPQmnxuASshv-M4Pn_HSxQt9A36g1iDKr0A8FJ')",
-          }}
+          style={{ backgroundImage: `url('${duskImg}')` }}
         />
 
         <div className="relative z-10 mx-auto max-w-(--container-max) px-gutter">
