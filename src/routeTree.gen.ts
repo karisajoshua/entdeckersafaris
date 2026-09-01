@@ -21,6 +21,7 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ToursSlugRouteImport } from './routes/tours.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminBlogRouteImport } from './routes/_authenticated/admin.blog'
 import { Route as AuthenticatedAdminEnquiriesRouteImport } from './routes/_authenticated/admin.enquiries'
 import { Route as AuthenticatedAdminGalleryRouteImport } from './routes/_authenticated/admin.gallery'
 
@@ -83,6 +84,11 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminBlogRoute = AuthenticatedAdminBlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const AuthenticatedAdminEnquiriesRoute =
   AuthenticatedAdminEnquiriesRouteImport.update({
     id: '/enquiries',
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/tours/$slug': typeof ToursSlugRoute
+  '/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
   '/admin/gallery': typeof AuthenticatedAdminGalleryRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByTo {
   '/tour-packages': typeof TourPackagesRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/tours/$slug': typeof ToursSlugRoute
+  '/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
   '/admin/gallery': typeof AuthenticatedAdminGalleryRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/tours/$slug': typeof ToursSlugRoute
+  '/_authenticated/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/_authenticated/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
   '/_authenticated/admin/gallery': typeof AuthenticatedAdminGalleryRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -155,6 +164,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/blog/$slug'
     | '/tours/$slug'
+    | '/admin/blog'
     | '/admin/enquiries'
     | '/admin/gallery'
     | '/admin/'
@@ -169,6 +179,7 @@ export interface FileRouteTypes {
     | '/tour-packages'
     | '/blog/$slug'
     | '/tours/$slug'
+    | '/admin/blog'
     | '/admin/enquiries'
     | '/admin/gallery'
     | '/admin'
@@ -185,6 +196,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/blog/$slug'
     | '/tours/$slug'
+    | '/_authenticated/admin/blog'
     | '/_authenticated/admin/enquiries'
     | '/_authenticated/admin/gallery'
     | '/_authenticated/admin/'
@@ -288,6 +300,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/blog': {
+      id: '/_authenticated/admin/blog'
+      path: '/blog'
+      fullPath: '/admin/blog'
+      preLoaderRoute: typeof AuthenticatedAdminBlogRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/enquiries': {
       id: '/_authenticated/admin/enquiries'
       path: '/enquiries'
@@ -306,12 +325,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminBlogRoute: typeof AuthenticatedAdminBlogRoute
   AuthenticatedAdminEnquiriesRoute: typeof AuthenticatedAdminEnquiriesRoute
   AuthenticatedAdminGalleryRoute: typeof AuthenticatedAdminGalleryRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminBlogRoute: AuthenticatedAdminBlogRoute,
   AuthenticatedAdminEnquiriesRoute: AuthenticatedAdminEnquiriesRoute,
   AuthenticatedAdminGalleryRoute: AuthenticatedAdminGalleryRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
