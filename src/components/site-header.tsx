@@ -17,6 +17,17 @@ const links = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const { user, loading } = useSession();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  async function handleSignOut() {
+    setOpen(false);
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    await navigate({ to: "/", replace: true });
+  }
 
   return (
     <header className="fixed top-0 z-50 w-full border-b border-deep-forest/10 bg-surface/90 backdrop-blur-md transition-all duration-300">
