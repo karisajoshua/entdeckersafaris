@@ -14,12 +14,12 @@ export function SiteHeader() {
 
   return (
     <header className="fixed top-0 z-50 w-full border-b border-deep-forest/10 bg-surface/90 backdrop-blur-md transition-all duration-300">
-      <div className="mx-auto flex max-w-(--container-max) items-center justify-between px-gutter py-3">
+      <div className="mx-auto flex max-w-(--container-max) items-center justify-between px-gutter py-2">
         <Link to="/" className="flex items-center" aria-label="Entdecker Safaris home">
           <img
             src={logo.url}
             alt="Entdecker Safaris logo"
-            className="h-14 w-auto md:h-16"
+            className="h-16 w-auto mix-blend-multiply md:h-20"
             width={1536}
             height={1024}
           />

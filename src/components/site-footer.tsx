@@ -8,13 +8,13 @@ export function SiteFooter() {
         <div className="col-span-1 pr-8 md:col-span-2">
           <Link
             to="/"
-            className="mb-6 inline-block rounded-lg bg-horizon-sand p-4"
+            className="mb-6 inline-block rounded-lg bg-horizon-sand px-6 py-4"
             aria-label="Entdecker Safaris home"
           >
             <img
               src={logo.url}
               alt="Entdecker Safaris logo"
-              className="h-20 w-auto"
+              className="h-24 w-auto mix-blend-multiply"
               width={1536}
               height={1024}
               loading="lazy"
