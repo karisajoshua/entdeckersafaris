@@ -100,7 +100,10 @@ export function SiteFooter() {
 
       <div className="mx-auto max-w-(--container-max) border-t border-surface-variant/10 px-gutter pb-8 pt-8 text-center">
         <p className="label text-surface-variant/50">
-          © 2024 Entdecker Safaris. All rights reserved.
+          © 2026 Entdecker Safaris. All rights reserved.
+        </p>
+        <p className="label mt-2 text-surface-variant/40">
+          Powered by Texcortech Systems
         </p>
       </div>
     </footer>
