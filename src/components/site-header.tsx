@@ -5,9 +5,12 @@ import logo from "../assets/entdecker-logo.png.asset.json";
 const links = [
   { to: "/", label: "Home" },
   { to: "/tour-packages", label: "Tour Packages" },
+  { to: "/gallery", label: "Gallery" },
+  { to: "/blog", label: "Blog" },
   { to: "/about", label: "About Us" },
   { to: "/contact", label: "Contact" },
 ] as const;
+
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
