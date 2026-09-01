@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
+import { submitEnquiry } from "../lib/content.functions";
 import duskImg from "../assets/contact-dusk.jpg";
 
 export const Route = createFileRoute("/contact")({
@@ -27,7 +29,39 @@ const fieldClass =
   "w-full border-0 border-b border-deep-forest/20 bg-transparent px-0 py-2 text-body-md text-deep-forest outline-none transition-colors placeholder:text-surface-dim focus:border-deep-forest";
 
 function Contact() {
+  const send = useServerFn(submitEnquiry);
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const values = new FormData(form);
+    setSending(true);
+    setError(null);
+    try {
+      await send({
+        data: {
+          name: String(values.get("name") ?? ""),
+          email: String(values.get("email") ?? ""),
+          phone: String(values.get("phone") ?? ""),
+          message: String(values.get("message") ?? ""),
+        },
+      });
+      setSent(true);
+      form.reset();
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "We could not send your message. Please try again or email us directly.",
+      );
+    } finally {
+      setSending(false);
+    }
+  }
+
 
   return (
     <div className="relative flex min-h-screen flex-col bg-surface">
@@ -110,13 +144,7 @@ function Contact() {
             </div>
 
             <div className="rounded-lg border border-deep-forest/10 bg-surface-container-lowest p-8 shadow-sm md:p-12">
-              <form
-                className="space-y-8"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setSent(true);
-                }}
-              >
+              <form className="space-y-8" onSubmit={onSubmit}>
                 <div>
                   <label className="label mb-2 block text-on-surface-variant" htmlFor="name">
                     Name
@@ -144,6 +172,18 @@ function Contact() {
                   />
                 </div>
                 <div>
+                  <label className="label mb-2 block text-on-surface-variant" htmlFor="phone">
+                    Phone (optional)
+                  </label>
+                  <input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    placeholder="Your phone number"
+                    className={fieldClass}
+                  />
+                </div>
+                <div>
                   <label className="label mb-2 block text-on-surface-variant" htmlFor="message">
                     Message
                   </label>
@@ -158,15 +198,17 @@ function Contact() {
                 </div>
                 <button
                   type="submit"
-                  className="label w-full rounded-sm bg-deep-forest px-8 py-4 text-horizon-sand shadow-editorial transition-all hover:opacity-90 hover:shadow-editorial-lg md:w-auto"
+                  disabled={sending}
+                  className="label w-full rounded-sm bg-deep-forest px-8 py-4 text-horizon-sand shadow-editorial transition-all hover:opacity-90 hover:shadow-editorial-lg disabled:opacity-60 md:w-auto"
                 >
-                  Send Message
+                  {sending ? "Sending…" : "Send Message"}
                 </button>
                 {sent && (
                   <p className="text-body-md text-savannah-gold">
                     Thank you — we'll be in touch shortly.
                   </p>
                 )}
+                {error && <p className="text-body-md text-red-700">{error}</p>}
               </form>
             </div>
           </div>

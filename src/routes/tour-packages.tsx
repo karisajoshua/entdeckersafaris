@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
-import { tours } from "../data/tours";
 import { Reveal } from "../components/reveal";
+import { toursQuery } from "../lib/queries";
 
 export const Route = createFileRoute("/tour-packages")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(toursQuery),
   head: () => ({
     meta: [
       { title: "Tour Packages — Curated Kenya Safari Journeys" },
@@ -18,17 +20,35 @@ export const Route = createFileRoute("/tour-packages")({
         property: "og:description",
         content: "Meticulously crafted safari itineraries across Kenya.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  errorComponent: () => <ToursMessage title="Tours unavailable" />,
+  notFoundComponent: () => <ToursMessage title="Tours not found" />,
   component: TourPackages,
 });
 
+function ToursMessage({ title }: { title: string }) {
+  return (
+    <div className="flex min-h-screen flex-col bg-surface">
+      <SiteHeader />
+      <main className="mx-auto flex w-full max-w-(--container-max) grow items-center justify-center px-gutter py-section-desktop">
+        <h1 className="text-headline-md text-deep-forest">{title}</h1>
+      </main>
+      <SiteFooter />
+    </div>
+  );
+}
+
 function TourPackages() {
+  const { data: tours } = useSuspenseQuery(toursQuery);
+
   return (
     <div className="flex min-h-screen flex-col bg-surface">
       <SiteHeader />
 
-      <header className="mx-auto mt-20 max-w-(--container-max) px-gutter pb-section-mobile pt-section-mobile md:pb-section-desktop md:pt-section-desktop">
+      <header className="mx-auto mt-20 w-full max-w-(--container-max) px-gutter pb-section-mobile pt-section-mobile md:pb-section-desktop md:pt-section-desktop">
         <div className="max-w-3xl">
           <h1 className="mb-6 text-headline-md text-deep-forest md:text-headline-lg">
             Curated Journeys
@@ -41,7 +61,7 @@ function TourPackages() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-(--container-max) grow px-gutter pb-section-desktop">
+      <main className="mx-auto w-full max-w-(--container-max) grow px-gutter pb-section-desktop">
         <div className="grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
           {tours.map((tour, i) => (
             <Reveal
@@ -54,8 +74,6 @@ function TourPackages() {
                 <img
                   alt={tour.alt}
                   src={tour.image}
-                  width={1024}
-                  height={768}
                   loading="lazy"
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />

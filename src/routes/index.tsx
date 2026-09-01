@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
-import { tours } from "../data/tours";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { toursQuery } from "../lib/queries";
 import heroImg from "../assets/hero-savannah.jpg";
 import featureImg from "../assets/feature-nairobi-park.jpg";
 import { Reveal } from "../components/reveal";
@@ -22,6 +23,7 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(toursQuery),
   component: Index,
 });
 
@@ -33,6 +35,7 @@ const stats = [
 ];
 
 function Index() {
+  const { data: tours } = useSuspenseQuery(toursQuery);
   const featured = tours.filter((t) =>
     ["nairobi-city-tour", "8-days-kenya-experience"].includes(t.slug),
   );

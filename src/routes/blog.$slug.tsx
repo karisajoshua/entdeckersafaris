@@ -2,11 +2,11 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 import { Reveal } from "../components/reveal";
-import { getPost } from "../data/blog";
+import { postQuery } from "../lib/queries";
 
 export const Route = createFileRoute("/blog/$slug")({
-  loader: ({ params }) => {
-    const post = getPost(params.slug);
+  loader: async ({ context, params }) => {
+    const post = await context.queryClient.ensureQueryData(postQuery(params.slug));
     if (!post) throw notFound();
     return { post };
   },
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/blog/$slug")({
     if (!loaderData) {
       return {
         meta: [
-          { title: "Article not found — Entdecker Safaris" },
+          { title: "Article unavailable — Entdecker Safaris" },
           { name: "robots", content: "noindex" },
         ],
       };
@@ -47,16 +47,17 @@ export const Route = createFileRoute("/blog/$slug")({
       ],
     };
   },
-  notFoundComponent: PostNotFound,
+  errorComponent: () => <PostNotFound title="Article unavailable" />,
+  notFoundComponent: () => <PostNotFound title="Article not found" />,
   component: BlogPostPage,
 });
 
-function PostNotFound() {
+function PostNotFound({ title }: { title: string }) {
   return (
     <div className="flex min-h-screen flex-col bg-surface">
       <SiteHeader />
-      <main className="mx-auto flex max-w-(--container-max) grow flex-col items-center justify-center px-gutter py-section-desktop text-center">
-        <h1 className="mb-6 text-headline-md text-deep-forest">Article not found</h1>
+      <main className="mx-auto flex w-full max-w-(--container-max) grow flex-col items-center justify-center px-gutter py-section-desktop text-center">
+        <h1 className="mb-6 text-headline-md text-deep-forest">{title}</h1>
         <Link to="/blog" className="label text-savannah-gold">
           Back to the journal
         </Link>

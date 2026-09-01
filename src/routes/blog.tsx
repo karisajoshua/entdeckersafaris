@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 import { Reveal } from "../components/reveal";
-import { posts } from "../data/blog";
+import { postsQuery } from "../lib/queries";
 
 export const Route = createFileRoute("/blog")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(postsQuery),
   head: () => ({
     meta: [
       { title: "Safari Journal — Kenya Travel Stories | Entdecker Safaris" },
@@ -24,17 +26,32 @@ export const Route = createFileRoute("/blog")({
     ],
     links: [{ rel: "canonical", href: "https://smile-smith-project.lovable.app/blog" }],
   }),
+  errorComponent: () => <BlogMessage title="Journal unavailable" />,
+  notFoundComponent: () => <BlogMessage title="Journal not found" />,
   component: BlogIndex,
 });
 
+function BlogMessage({ title }: { title: string }) {
+  return (
+    <div className="flex min-h-screen flex-col bg-surface">
+      <SiteHeader />
+      <main className="mx-auto flex w-full max-w-(--container-max) grow items-center justify-center px-gutter py-section-desktop">
+        <h1 className="text-headline-md text-deep-forest">{title}</h1>
+      </main>
+      <SiteFooter />
+    </div>
+  );
+}
+
 function BlogIndex() {
+  const { data: posts } = useSuspenseQuery(postsQuery);
   const [featured, ...rest] = posts;
 
   return (
     <div className="flex min-h-screen flex-col bg-surface">
       <SiteHeader />
 
-      <header className="mx-auto mt-24 max-w-(--container-max) px-gutter pb-12 pt-section-mobile md:pt-section-desktop">
+      <header className="mx-auto mt-24 w-full max-w-(--container-max) px-gutter pb-12 pt-section-mobile md:pt-section-desktop">
         <div className="max-w-3xl">
           <span className="label text-savannah-gold">Journal</span>
           <h1 className="mb-6 mt-4 text-headline-md text-deep-forest md:text-headline-lg">
@@ -48,6 +65,12 @@ function BlogIndex() {
       </header>
 
       <main className="mx-auto w-full max-w-(--container-max) grow px-gutter pb-section-desktop">
+        {posts.length === 0 && (
+          <p className="text-body-md text-on-surface-variant">
+            New stories are on the way — check back soon.
+          </p>
+        )}
+
         {featured && (
           <Reveal
             as="article"
