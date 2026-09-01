@@ -59,12 +59,41 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <Link
-          to="/contact"
-          className="hidden rounded-sm bg-deep-forest px-6 py-3 text-horizon-sand shadow-editorial transition-opacity duration-300 hover:opacity-90 lg:block label"
-        >
-          Book Now
-        </Link>
+        <div className="hidden items-center gap-5 lg:flex">
+          {!loading &&
+            (user ? (
+              <>
+                <Link
+                  to="/admin"
+                  className="label text-on-surface-variant transition-colors duration-300 hover:text-savannah-gold"
+                >
+                  Admin
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => void handleSignOut()}
+                  className="label text-on-surface-variant transition-colors duration-300 hover:text-savannah-gold"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/auth"
+                className="label text-on-surface-variant transition-colors duration-300 hover:text-savannah-gold"
+              >
+                Sign In
+              </Link>
+            ))}
+
+          <Link
+            to="/contact"
+            className="rounded-sm bg-deep-forest px-6 py-3 text-horizon-sand shadow-editorial transition-opacity duration-300 hover:opacity-90 label"
+          >
+            Book Now
+          </Link>
+        </div>
+
 
         <button
           type="button"
