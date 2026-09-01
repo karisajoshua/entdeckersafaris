@@ -14,11 +14,12 @@ export function SiteFooter() {
             <img
               src={logo.url}
               alt="Entdecker Safaris logo"
-              className="h-24 w-auto mix-blend-multiply"
+              className="h-32 w-auto mix-blend-multiply md:h-36"
               width={1536}
               height={1024}
               loading="lazy"
             />
+
           </Link>
           <p className="max-w-[400px] text-body-md text-surface-variant/70">
             Crafting luxurious, organic, and highly personalized safari experiences across Kenya's
@@ -58,26 +59,43 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <h4 className="label mb-6 text-savannah-gold">Legal</h4>
+          <h4 className="label mb-6 text-savannah-gold">Explore</h4>
           <ul className="space-y-4 text-body-md">
             <li>
-              <a
-                href="#"
+              <Link
+                to="/tour-packages"
                 className="text-surface-variant/70 transition-colors duration-200 hover:text-savannah-gold"
               >
-                Privacy Policy
-              </a>
+                Tour Packages
+              </Link>
             </li>
             <li>
-              <a
-                href="#"
+              <Link
+                to="/gallery"
                 className="text-surface-variant/70 transition-colors duration-200 hover:text-savannah-gold"
               >
-                Terms of Service
-              </a>
+                Gallery
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/blog"
+                className="text-surface-variant/70 transition-colors duration-200 hover:text-savannah-gold"
+              >
+                Blog
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/about"
+                className="text-surface-variant/70 transition-colors duration-200 hover:text-savannah-gold"
+              >
+                About Us
+              </Link>
             </li>
           </ul>
         </div>
+
       </div>
 
       <div className="mx-auto max-w-(--container-max) border-t border-surface-variant/10 px-gutter pb-8 pt-8 text-center">
