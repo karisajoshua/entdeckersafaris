@@ -29,7 +29,39 @@ const fieldClass =
   "w-full border-0 border-b border-deep-forest/20 bg-transparent px-0 py-2 text-body-md text-deep-forest outline-none transition-colors placeholder:text-surface-dim focus:border-deep-forest";
 
 function Contact() {
+  const send = useServerFn(submitEnquiry);
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const values = new FormData(form);
+    setSending(true);
+    setError(null);
+    try {
+      await send({
+        data: {
+          name: String(values.get("name") ?? ""),
+          email: String(values.get("email") ?? ""),
+          phone: String(values.get("phone") ?? ""),
+          message: String(values.get("message") ?? ""),
+        },
+      });
+      setSent(true);
+      form.reset();
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "We could not send your message. Please try again or email us directly.",
+      );
+    } finally {
+      setSending(false);
+    }
+  }
+
 
   return (
     <div className="relative flex min-h-screen flex-col bg-surface">
