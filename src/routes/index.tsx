@@ -1,24 +1,188 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { SiteHeader } from "../components/site-header";
+import { SiteFooter } from "../components/site-footer";
+import { tours } from "../data/tours";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Entdecker Safaris — Luxury Kenya Safaris from Nairobi" },
+      {
+        name: "description",
+        content:
+          "Personalized luxury safaris across Kenya. Explore, discover and connect with curated journeys from Nairobi to the Masai Mara.",
+      },
+      { property: "og:title", content: "Entdecker Safaris — Luxury Kenya Safaris" },
+      {
+        property: "og:description",
+        content: "Experience the unique beauty of Kenya with personalized luxury safaris.",
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+const stats = [
+  { icon: "group", value: "+500", label: "Happy Customers" },
+  { icon: "map", value: "+20", label: "Curated Tours" },
+  { icon: "explore", value: "100%", label: "Excellent Guides" },
+  { icon: "language", value: "+4", label: "Languages Spoken" },
+];
+
 function Index() {
+  const featured = tours.filter((t) =>
+    ["nairobi-city-tour", "8-days-kenya-experience"].includes(t.slug),
+  );
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background">
+      <SiteHeader />
+
+      <main>
+        {/* Hero */}
+        <section className="relative flex h-screen min-h-[600px] w-full items-center justify-center pt-20">
+          <div
+            className="absolute inset-0 h-full w-full bg-cover bg-center"
+            style={{
+              backgroundImage:
+                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCRExPCasgceKrmupxfk-fWssezreKPKX9IVndodiXTfGxZAgL41lzSWCUab--S1FshMseG_x_1bmJzzhe8XdyzQCoTRZMLsyqD2ifR02nZOX9NZzQY4CLIrqGLcO0PdcTwUbEAWMzJr34oHg4T9ik0AWDVAv4v0uWfb0aE4CaTQNiTVwWUfbEcyTkWKFprwqDE4yYsT2ccHmU3_-Fczpltv7GB75-Ljco-iqs8MvbtdM-OffMusx24')",
+            }}
+          />
+          <div className="hero-overlay absolute inset-0" />
+          <div className="relative z-10 mx-auto flex max-w-[800px] flex-col items-center px-gutter text-center">
+            <h1 className="mb-6 text-headline-lg text-horizon-sand md:text-display-xl">
+              Explore. Discover. Connect.
+            </h1>
+            <p className="mb-10 max-w-[600px] text-body-lg text-horizon-sand/90">
+              Experience the unique beauty of Kenya with personalized luxury safaris.
+            </p>
+            <Link
+              to="/tour-packages"
+              className="label rounded-sm bg-deep-forest px-8 py-4 text-horizon-sand shadow-editorial transition-all duration-300 hover:-translate-y-1 hover:opacity-90"
+            >
+              Start Your Journey
+            </Link>
+          </div>
+        </section>
+
+        {/* Experience */}
+        <section className="mx-auto max-w-(--container-max) px-gutter py-section-mobile md:py-section-desktop">
+          <div className="grid grid-cols-1 items-center gap-16 md:grid-cols-2">
+            <div>
+              <h2 className="mb-6 text-headline-md text-deep-forest md:text-headline-lg">
+                The Entdecker Experience
+              </h2>
+              <p className="mb-6 text-body-md text-on-surface-variant">
+                Discover Nairobi, the 'place of cool waters'. We offer a unique blend where the
+                vibrant energy of a modern metropolis seamlessly meets the raw, untamed beauty of
+                the African wild. Our curated experiences are designed for those who seek both
+                comfort and genuine adventure.
+              </p>
+              <Link
+                to="/about"
+                className="label inline-flex items-center gap-2 text-savannah-gold transition-opacity hover:opacity-80"
+              >
+                Read Our Story
+                <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+              </Link>
+            </div>
+            <div className="relative h-[400px] overflow-hidden rounded-lg border border-deep-forest/10">
+              <img
+                className="h-full w-full object-cover"
+                alt="Forest landscape meeting minimalist modern architecture"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR5fG7nxYh9OtklplJtEkqXhXjPmqzhdpOKUdS6oH7DA7VZdJv2VSiIOt2o7FIGPKzQzIBwoNn_mlI_pfli8YDfP6H78RapW1et7dg9z1WuyIBTB_E3Wl8gtA43ya8MZOiuGrP7UcXF1dxVaOE8X0IIc1UvYlPJSZJP97V_iBcS5EYRJYuaROcuC-0JwOOjk5atXicjgQGtqE6bh-1JMqbxJz8VJRMRe9ZbdKYDFqRl8PDP9Nvo0cz"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Featured */}
+        <section className="bg-surface-container-low px-gutter py-section-mobile md:py-section-desktop">
+          <div className="mx-auto max-w-(--container-max)">
+            <div className="mb-12 flex items-end justify-between">
+              <h2 className="text-headline-md text-deep-forest md:text-headline-lg">
+                Featured Safaris
+              </h2>
+              <Link
+                to="/tour-packages"
+                className="label hidden items-center gap-2 text-deep-forest transition-colors hover:text-savannah-gold md:inline-flex"
+              >
+                View All Tours
+                <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+              {featured.map((tour) => (
+                <div
+                  key={tour.slug}
+                  className="group relative overflow-hidden rounded-lg border border-deep-forest/10 bg-surface transition-all duration-300 hover:shadow-editorial"
+                >
+                  <div className="relative h-[300px] w-full overflow-hidden">
+                    <img
+                      className="h-full w-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
+                      alt={tour.alt}
+                      src={tour.image}
+                    />
+                    <div className="absolute right-4 top-4 rounded-sm border border-deep-forest/10 bg-surface/90 px-3 py-1 backdrop-blur-sm">
+                      <span className="label text-deep-forest">{tour.duration}</span>
+                    </div>
+                  </div>
+                  <div className="p-8">
+                    <h3 className="mb-2 text-headline-md text-deep-forest transition-colors group-hover:text-savannah-gold">
+                      {tour.title}
+                    </h3>
+                    <p className="mb-6 text-body-md text-on-surface-variant">{tour.tagline}</p>
+                    <Link
+                      to="/tour-packages"
+                      className="label block w-full rounded-sm border border-savannah-gold py-3 text-center text-savannah-gold transition-colors duration-300 hover:bg-savannah-gold hover:text-surface"
+                    >
+                      Explore Details
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Standard */}
+        <section className="mx-auto max-w-(--container-max) border-t border-deep-forest/10 px-gutter py-section-mobile md:py-section-desktop">
+          <h2 className="mb-16 text-center text-headline-md text-deep-forest">
+            The Entdecker Standard
+          </h2>
+          <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
+            {stats.map((stat) => (
+              <div key={stat.label} className="flex flex-col items-center">
+                <span className="material-symbols-outlined mb-4 text-[48px] text-savannah-gold">
+                  {stat.icon}
+                </span>
+                <h4 className="mb-2 text-headline-md text-deep-forest">{stat.value}</h4>
+                <p className="label text-on-surface-variant">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Quote */}
+        <section className="bg-deep-forest px-gutter py-section-mobile text-horizon-sand md:py-section-desktop">
+          <div className="mx-auto max-w-[800px] text-center">
+            <span className="material-symbols-outlined mb-6 text-[32px] text-savannah-gold">
+              format_quote
+            </span>
+            <p className="text-headline-md leading-relaxed text-horizon-sand/90">
+              "As travel consultants, we are here to help you create a memorable trip. Our passion
+              for Kenya's landscapes and deep respect for its heritage ensures every safari is a
+              masterpiece of discovery."
+            </p>
+            <div className="mt-8">
+              <p className="label text-savannah-gold">The Entdecker Team</p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <SiteFooter />
     </div>
   );
 }
