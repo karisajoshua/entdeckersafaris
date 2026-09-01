@@ -21,7 +21,10 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ToursSlugRouteImport } from './routes/tours.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminBlogRouteImport } from './routes/_authenticated/admin.blog'
 import { Route as AuthenticatedAdminEnquiriesRouteImport } from './routes/_authenticated/admin.enquiries'
+import { Route as AuthenticatedAdminGalleryRouteImport } from './routes/_authenticated/admin.gallery'
+import { Route as AuthenticatedAdminToursRouteImport } from './routes/_authenticated/admin.tours'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -82,12 +85,28 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminBlogRoute = AuthenticatedAdminBlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const AuthenticatedAdminEnquiriesRoute =
   AuthenticatedAdminEnquiriesRouteImport.update({
     id: '/enquiries',
     path: '/enquiries',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminGalleryRoute =
+  AuthenticatedAdminGalleryRouteImport.update({
+    id: '/gallery',
+    path: '/gallery',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminToursRoute = AuthenticatedAdminToursRouteImport.update({
+  id: '/tours',
+  path: '/tours',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -100,7 +119,10 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/tours/$slug': typeof ToursSlugRoute
+  '/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
+  '/admin/gallery': typeof AuthenticatedAdminGalleryRoute
+  '/admin/tours': typeof AuthenticatedAdminToursRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -113,7 +135,10 @@ export interface FileRoutesByTo {
   '/tour-packages': typeof TourPackagesRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/tours/$slug': typeof ToursSlugRoute
+  '/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
+  '/admin/gallery': typeof AuthenticatedAdminGalleryRoute
+  '/admin/tours': typeof AuthenticatedAdminToursRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
@@ -129,7 +154,10 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/tours/$slug': typeof ToursSlugRoute
+  '/_authenticated/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/_authenticated/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
+  '/_authenticated/admin/gallery': typeof AuthenticatedAdminGalleryRoute
+  '/_authenticated/admin/tours': typeof AuthenticatedAdminToursRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -145,7 +173,10 @@ export interface FileRouteTypes {
     | '/admin'
     | '/blog/$slug'
     | '/tours/$slug'
+    | '/admin/blog'
     | '/admin/enquiries'
+    | '/admin/gallery'
+    | '/admin/tours'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -158,7 +189,10 @@ export interface FileRouteTypes {
     | '/tour-packages'
     | '/blog/$slug'
     | '/tours/$slug'
+    | '/admin/blog'
     | '/admin/enquiries'
+    | '/admin/gallery'
+    | '/admin/tours'
     | '/admin'
   id:
     | '__root__'
@@ -173,7 +207,10 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/blog/$slug'
     | '/tours/$slug'
+    | '/_authenticated/admin/blog'
     | '/_authenticated/admin/enquiries'
+    | '/_authenticated/admin/gallery'
+    | '/_authenticated/admin/tours'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -275,6 +312,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/blog': {
+      id: '/_authenticated/admin/blog'
+      path: '/blog'
+      fullPath: '/admin/blog'
+      preLoaderRoute: typeof AuthenticatedAdminBlogRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/enquiries': {
       id: '/_authenticated/admin/enquiries'
       path: '/enquiries'
@@ -282,16 +326,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminEnquiriesRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/gallery': {
+      id: '/_authenticated/admin/gallery'
+      path: '/gallery'
+      fullPath: '/admin/gallery'
+      preLoaderRoute: typeof AuthenticatedAdminGalleryRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/tours': {
+      id: '/_authenticated/admin/tours'
+      path: '/tours'
+      fullPath: '/admin/tours'
+      preLoaderRoute: typeof AuthenticatedAdminToursRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
   }
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminBlogRoute: typeof AuthenticatedAdminBlogRoute
   AuthenticatedAdminEnquiriesRoute: typeof AuthenticatedAdminEnquiriesRoute
+  AuthenticatedAdminGalleryRoute: typeof AuthenticatedAdminGalleryRoute
+  AuthenticatedAdminToursRoute: typeof AuthenticatedAdminToursRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminBlogRoute: AuthenticatedAdminBlogRoute,
   AuthenticatedAdminEnquiriesRoute: AuthenticatedAdminEnquiriesRoute,
+  AuthenticatedAdminGalleryRoute: AuthenticatedAdminGalleryRoute,
+  AuthenticatedAdminToursRoute: AuthenticatedAdminToursRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
 
