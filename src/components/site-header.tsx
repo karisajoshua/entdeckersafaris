@@ -22,9 +22,9 @@ export function SiteHeader() {
           <img
             src={logo.url}
             alt="Entdecker Safaris logo"
-            className="h-24 w-auto mix-blend-multiply md:h-28"
-            width={1536}
-            height={1024}
+            className="h-24 w-auto md:h-28"
+            width={940}
+            height={800}
           />
         </Link>
 
