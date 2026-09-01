@@ -146,7 +146,7 @@ function AuthPage() {
           onClick={() => void onGoogle()}
           className="label mt-4 w-full rounded-sm border border-deep-forest/20 px-8 py-4 text-deep-forest transition-colors hover:border-deep-forest"
         >
-          Continue with Google
+          {mode === "signup" ? "Sign up with Google" : "Continue with Google"}
         </button>
 
         <button
