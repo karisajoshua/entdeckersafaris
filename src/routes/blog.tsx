@@ -47,7 +47,7 @@ function BlogIndex() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-(--container-max) grow px-gutter pb-section-desktop">
+      <main className="mx-auto w-full max-w-(--container-max) grow px-gutter pb-section-desktop">
         {featured && (
           <Reveal
             as="article"

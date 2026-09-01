@@ -50,7 +50,7 @@ function GalleryPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-(--container-max) grow px-gutter pb-section-desktop">
+      <main className="mx-auto w-full max-w-(--container-max) grow px-gutter pb-section-desktop">
         {galleryLocations.map((location) => (
           <section key={location.slug} className="mb-section-desktop last:mb-0">
             <Reveal className="mb-10 max-w-2xl border-l-2 border-savannah-gold pl-6">
