@@ -172,6 +172,18 @@ function Contact() {
                   />
                 </div>
                 <div>
+                  <label className="label mb-2 block text-on-surface-variant" htmlFor="phone">
+                    Phone (optional)
+                  </label>
+                  <input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    placeholder="Your phone number"
+                    className={fieldClass}
+                  />
+                </div>
+                <div>
                   <label className="label mb-2 block text-on-surface-variant" htmlFor="message">
                     Message
                   </label>
@@ -186,15 +198,17 @@ function Contact() {
                 </div>
                 <button
                   type="submit"
-                  className="label w-full rounded-sm bg-deep-forest px-8 py-4 text-horizon-sand shadow-editorial transition-all hover:opacity-90 hover:shadow-editorial-lg md:w-auto"
+                  disabled={sending}
+                  className="label w-full rounded-sm bg-deep-forest px-8 py-4 text-horizon-sand shadow-editorial transition-all hover:opacity-90 hover:shadow-editorial-lg disabled:opacity-60 md:w-auto"
                 >
-                  Send Message
+                  {sending ? "Sending…" : "Send Message"}
                 </button>
                 {sent && (
                   <p className="text-body-md text-savannah-gold">
                     Thank you — we'll be in touch shortly.
                   </p>
                 )}
+                {error && <p className="text-body-md text-red-700">{error}</p>}
               </form>
             </div>
           </div>
