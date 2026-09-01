@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as TourPackagesRouteImport } from './routes/tour-packages'
 import { Route as ToursSlugRouteImport } from './routes/tours.$slug'
 
@@ -30,6 +31,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TourPackagesRoute = TourPackagesRouteImport.update({
   id: '/tour-packages',
   path: '/tour-packages',
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/gallery': typeof GalleryRoute
   '/tour-packages': typeof TourPackagesRoute
   '/tours/$slug': typeof ToursSlugRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/gallery': typeof GalleryRoute
   '/tour-packages': typeof TourPackagesRoute
   '/tours/$slug': typeof ToursSlugRoute
 }
@@ -60,22 +68,32 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/gallery': typeof GalleryRoute
   '/tour-packages': typeof TourPackagesRoute
   '/tours/$slug': typeof ToursSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/contact' | '/tour-packages' | '/tours/$slug'
+  fullPaths:
+    '/' | '/about' | '/contact' | '/gallery' | '/tour-packages' | '/tours/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/contact' | '/tour-packages' | '/tours/$slug'
+  to:
+    '/' | '/about' | '/contact' | '/gallery' | '/tour-packages' | '/tours/$slug'
   id:
-    '__root__' | '/' | '/about' | '/contact' | '/tour-packages' | '/tours/$slug'
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/gallery'
+    | '/tour-packages'
+    | '/tours/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
+  GalleryRoute: typeof GalleryRoute
   TourPackagesRoute: typeof TourPackagesRoute
   ToursSlugRoute: typeof ToursSlugRoute
 }
@@ -103,6 +121,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tour-packages': {
       id: '/tour-packages'
       path: '/tour-packages'
@@ -124,6 +149,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
+  GalleryRoute: GalleryRoute,
   TourPackagesRoute: TourPackagesRoute,
   ToursSlugRoute: ToursSlugRoute,
 }
