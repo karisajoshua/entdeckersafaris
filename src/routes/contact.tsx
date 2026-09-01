@@ -144,13 +144,7 @@ function Contact() {
             </div>
 
             <div className="rounded-lg border border-deep-forest/10 bg-surface-container-lowest p-8 shadow-sm md:p-12">
-              <form
-                className="space-y-8"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setSent(true);
-                }}
-              >
+              <form className="space-y-8" onSubmit={onSubmit}>
                 <div>
                   <label className="label mb-2 block text-on-surface-variant" htmlFor="name">
                     Name
