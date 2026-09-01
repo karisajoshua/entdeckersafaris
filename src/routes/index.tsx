@@ -139,7 +139,8 @@ function Index() {
                     </h3>
                     <p className="mb-6 text-body-md text-on-surface-variant">{tour.tagline}</p>
                     <Link
-                      to="/tour-packages"
+                      to="/tours/$slug"
+                      params={{ slug: tour.slug }}
                       className="label block w-full rounded-sm border border-savannah-gold py-3 text-center text-savannah-gold transition-colors duration-300 hover:bg-savannah-gold hover:text-surface"
                     >
                       Explore Details

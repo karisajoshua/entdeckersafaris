@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 import { tours } from "../data/tours";
+import { Reveal } from "../components/reveal";
 
 export const Route = createFileRoute("/tour-packages")({
   head: () => ({
@@ -42,8 +43,10 @@ function TourPackages() {
 
       <main className="mx-auto max-w-(--container-max) grow px-gutter pb-section-desktop">
         <div className="grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
-          {tours.map((tour) => (
-            <article
+          {tours.map((tour, i) => (
+            <Reveal
+              as="article"
+              delay={i * 70}
               key={tour.slug}
               className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-deep-forest/10 bg-surface-container-lowest transition-shadow duration-300 hover:shadow-editorial"
             >
@@ -64,14 +67,15 @@ function TourPackages() {
                 <h2 className="mb-4 text-headline-md text-deep-forest">{tour.title}</h2>
                 <p className="mb-8 grow text-body-md text-on-surface-variant">{tour.tagline}</p>
                 <Link
-                  to="/contact"
+                  to="/tours/$slug"
+                  params={{ slug: tour.slug }}
                   className="label mt-auto inline-flex w-fit items-center space-x-2 border-b border-transparent pb-1 text-savannah-gold transition-colors hover:border-deep-forest hover:text-deep-forest"
                 >
                   <span>View Itinerary</span>
                   <span className="material-symbols-outlined text-[18px]">arrow_right_alt</span>
                 </Link>
               </div>
-            </article>
+            </Reveal>
           ))}
         </div>
       </main>
