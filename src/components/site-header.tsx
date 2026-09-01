@@ -1,5 +1,8 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useSession } from "@/hooks/use-session";
 import logo from "../assets/entdecker-logo.png.asset.json";
 
 const links = [
@@ -14,6 +17,17 @@ const links = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const { user, loading } = useSession();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  async function handleSignOut() {
+    setOpen(false);
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    await navigate({ to: "/", replace: true });
+  }
 
   return (
     <header className="fixed top-0 z-50 w-full border-b border-deep-forest/10 bg-surface/90 backdrop-blur-md transition-all duration-300">
@@ -45,12 +59,41 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <Link
-          to="/contact"
-          className="hidden rounded-sm bg-deep-forest px-6 py-3 text-horizon-sand shadow-editorial transition-opacity duration-300 hover:opacity-90 lg:block label"
-        >
-          Book Now
-        </Link>
+        <div className="hidden items-center gap-5 lg:flex">
+          {!loading &&
+            (user ? (
+              <>
+                <Link
+                  to="/admin"
+                  className="label text-on-surface-variant transition-colors duration-300 hover:text-savannah-gold"
+                >
+                  Admin
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => void handleSignOut()}
+                  className="label text-on-surface-variant transition-colors duration-300 hover:text-savannah-gold"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/auth"
+                className="label text-on-surface-variant transition-colors duration-300 hover:text-savannah-gold"
+              >
+                Sign In
+              </Link>
+            ))}
+
+          <Link
+            to="/contact"
+            className="rounded-sm bg-deep-forest px-6 py-3 text-horizon-sand shadow-editorial transition-opacity duration-300 hover:opacity-90 label"
+          >
+            Book Now
+          </Link>
+        </div>
+
 
         <button
           type="button"
@@ -76,6 +119,37 @@ export function SiteHeader() {
               {link.label}
             </Link>
           ))}
+
+          {!loading && (
+            <div className="mt-2 flex flex-col gap-1 border-t border-deep-forest/10 pt-2">
+              {user ? (
+                <>
+                  <Link
+                    to="/admin"
+                    onClick={() => setOpen(false)}
+                    className="label py-3 text-savannah-gold"
+                  >
+                    Admin
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => void handleSignOut()}
+                    className="label py-3 text-left text-on-surface-variant"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/auth"
+                  onClick={() => setOpen(false)}
+                  className="label py-3 text-savannah-gold"
+                >
+                  Sign In
+                </Link>
+              )}
+            </div>
+          )}
         </nav>
       )}
     </header>

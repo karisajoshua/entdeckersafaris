@@ -32,6 +32,7 @@ function AuthPage() {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -108,15 +109,28 @@ function AuthPage() {
             <label className="label mb-2 block text-on-surface-variant" htmlFor="password">
               Password
             </label>
-            <input
-              id="password"
-              type="password"
-              required
-              minLength={8}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className={fieldClass}
-            />
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                required
+                minLength={8}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={`${fieldClass} pr-12`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                aria-pressed={showPassword}
+                className="absolute inset-y-0 right-0 flex items-center px-3 text-on-surface-variant transition-colors hover:text-deep-forest"
+              >
+                <span className="material-symbols-outlined text-[20px]">
+                  {showPassword ? "visibility_off" : "visibility"}
+                </span>
+              </button>
+            </div>
           </div>
           <button
             type="submit"
@@ -132,7 +146,7 @@ function AuthPage() {
           onClick={() => void onGoogle()}
           className="label mt-4 w-full rounded-sm border border-deep-forest/20 px-8 py-4 text-deep-forest transition-colors hover:border-deep-forest"
         >
-          Continue with Google
+          {mode === "signup" ? "Sign up with Google" : "Continue with Google"}
         </button>
 
         <button
