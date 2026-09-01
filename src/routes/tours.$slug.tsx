@@ -2,11 +2,11 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 import { Reveal } from "../components/reveal";
-import { getTour } from "../data/tours";
+import { tourQuery } from "../lib/queries";
 
 export const Route = createFileRoute("/tours/$slug")({
-  loader: ({ params }) => {
-    const tour = getTour(params.slug);
+  loader: async ({ context, params }) => {
+    const tour = await context.queryClient.ensureQueryData(tourQuery(params.slug));
     if (!tour) throw notFound();
     return { tour };
   },
