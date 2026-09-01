@@ -30,6 +30,7 @@ export const Route = createFileRoute("/tours/$slug")({
     };
   },
   notFoundComponent: TourNotFound,
+  errorComponent: TourNotFound,
   component: TourDetail,
 });
 
