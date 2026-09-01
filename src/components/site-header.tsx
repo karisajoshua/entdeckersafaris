@@ -47,7 +47,7 @@ export function SiteHeader() {
 
         <Link
           to="/contact"
-          className="hidden rounded-sm bg-deep-forest px-6 py-3 text-horizon-sand shadow-editorial transition-opacity duration-300 hover:opacity-90 md:block label"
+          className="hidden rounded-sm bg-deep-forest px-6 py-3 text-horizon-sand shadow-editorial transition-opacity duration-300 hover:opacity-90 lg:block label"
         >
           Book Now
         </Link>
@@ -56,14 +56,14 @@ export function SiteHeader() {
           type="button"
           aria-label="Toggle navigation"
           onClick={() => setOpen((v) => !v)}
-          className="p-2 text-deep-forest md:hidden"
+          className="p-2 text-deep-forest lg:hidden"
         >
           <span className="material-symbols-outlined text-[24px]">{open ? "close" : "menu"}</span>
         </button>
       </div>
 
       {open && (
-        <nav className="flex flex-col gap-1 border-t border-deep-forest/10 bg-surface px-gutter py-4 md:hidden">
+        <nav className="flex flex-col gap-1 border-t border-deep-forest/10 bg-surface px-gutter py-4 lg:hidden">
           {links.map((link) => (
             <Link
               key={link.to}
