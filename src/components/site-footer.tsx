@@ -1,12 +1,24 @@
 import { Link } from "@tanstack/react-router";
+import logo from "../assets/entdecker-logo.png.asset.json";
 
 export function SiteFooter() {
   return (
     <footer className="w-full bg-deep-forest text-horizon-sand">
       <div className="mx-auto grid max-w-(--container-max) grid-cols-1 gap-8 px-gutter py-section-mobile md:grid-cols-4 md:py-section-desktop">
         <div className="col-span-1 pr-8 md:col-span-2">
-          <Link to="/" className="mb-6 block font-display text-headline-md text-horizon-sand">
-            Entdecker Safaris
+          <Link
+            to="/"
+            className="mb-6 inline-block rounded-lg bg-horizon-sand px-6 py-4"
+            aria-label="Entdecker Safaris home"
+          >
+            <img
+              src={logo.url}
+              alt="Entdecker Safaris logo"
+              className="h-24 w-auto mix-blend-multiply"
+              width={1536}
+              height={1024}
+              loading="lazy"
+            />
           </Link>
           <p className="max-w-[400px] text-body-md text-surface-variant/70">
             Crafting luxurious, organic, and highly personalized safari experiences across Kenya's
@@ -24,6 +36,14 @@ export function SiteFooter() {
                 className="text-surface-variant/70 transition-colors duration-200 hover:text-savannah-gold"
               >
                 +254 721 886 882
+              </a>
+            </li>
+            <li>
+              <a
+                href="tel:+254104886882"
+                className="text-surface-variant/70 transition-colors duration-200 hover:text-savannah-gold"
+              >
+                +254 104 886 882
               </a>
             </li>
             <li>

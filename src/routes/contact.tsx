@@ -45,10 +45,14 @@ function Contact() {
               <h1 className="text-headline-lg tracking-tight text-deep-forest md:text-display-xl">
                 Would like to talk?
               </h1>
-              <p className="max-w-md text-body-lg text-on-surface-variant">
-                Reach out to us to begin crafting your bespoke safari experience. We are here to
-                answer any questions and guide your journey.
-              </p>
+              <div className="space-y-4">
+                <h2 className="label text-savannah-gold">Contact Details</h2>
+                <p className="max-w-md text-body-lg text-on-surface-variant">
+                  If you have a story to share or a question that has not been answered on our
+                  website, please get in touch with us via the contact details listed below or fill
+                  in the form on the right.
+                </p>
+              </div>
 
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
@@ -66,9 +70,15 @@ function Contact() {
                     <h3 className="label mb-1 text-on-surface-variant">Phone</h3>
                     <a
                       href="tel:+254721886882"
-                      className="text-body-md text-deep-forest transition-colors hover:text-savannah-gold"
+                      className="block text-body-md text-deep-forest transition-colors hover:text-savannah-gold"
                     >
                       +254 721 886 882
+                    </a>
+                    <a
+                      href="tel:+254104886882"
+                      className="block text-body-md text-deep-forest transition-colors hover:text-savannah-gold"
+                    >
+                      +254 104 886 882
                     </a>
                   </div>
                 </div>
@@ -81,6 +91,18 @@ function Contact() {
                       className="text-body-md text-deep-forest transition-colors hover:text-savannah-gold"
                     >
                       info@entdeckersafaris.com
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <span className="material-symbols-outlined mt-1 text-savannah-gold">language</span>
+                  <div>
+                    <h3 className="label mb-1 text-on-surface-variant">Website</h3>
+                    <a
+                      href="https://entdeckersafaris.com"
+                      className="text-body-md text-deep-forest transition-colors hover:text-savannah-gold"
+                    >
+                      entdeckersafaris.com
                     </a>
                   </div>
                 </div>

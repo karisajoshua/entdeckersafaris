@@ -4,6 +4,7 @@ import { SiteFooter } from "../components/site-footer";
 import { tours } from "../data/tours";
 import heroImg from "../assets/hero-savannah.jpg";
 import featureImg from "../assets/feature-nairobi-park.jpg";
+import { Reveal } from "../components/reveal";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -67,7 +68,7 @@ function Index() {
         {/* Experience */}
         <section className="mx-auto max-w-(--container-max) px-gutter py-section-mobile md:py-section-desktop">
           <div className="grid grid-cols-1 items-center gap-16 md:grid-cols-2">
-            <div>
+            <Reveal>
               <h2 className="mb-6 text-headline-md text-deep-forest md:text-headline-lg">
                 The Entdecker Experience
               </h2>
@@ -84,8 +85,8 @@ function Index() {
                 Read Our Story
                 <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
               </Link>
-            </div>
-            <div className="relative h-[400px] overflow-hidden rounded-lg border border-deep-forest/10">
+            </Reveal>
+            <Reveal delay={120} className="relative h-[400px] overflow-hidden rounded-lg border border-deep-forest/10">
               <img
                 className="h-full w-full object-cover"
                 alt="Giraffes grazing in Nairobi National Park with the city skyline behind"
@@ -94,7 +95,7 @@ function Index() {
                 height={1024}
                 loading="lazy"
               />
-            </div>
+            </Reveal>
           </div>
         </section>
 
@@ -115,9 +116,10 @@ function Index() {
             </div>
 
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-              {featured.map((tour) => (
-                <div
+              {featured.map((tour, i) => (
+                <Reveal
                   key={tour.slug}
+                  delay={i * 90}
                   className="group relative overflow-hidden rounded-lg border border-deep-forest/10 bg-surface transition-all duration-300 hover:shadow-editorial"
                 >
                   <div className="relative h-[300px] w-full overflow-hidden">
@@ -139,13 +141,14 @@ function Index() {
                     </h3>
                     <p className="mb-6 text-body-md text-on-surface-variant">{tour.tagline}</p>
                     <Link
-                      to="/tour-packages"
+                      to="/tours/$slug"
+                      params={{ slug: tour.slug }}
                       className="label block w-full rounded-sm border border-savannah-gold py-3 text-center text-savannah-gold transition-colors duration-300 hover:bg-savannah-gold hover:text-surface"
                     >
                       Explore Details
                     </Link>
                   </div>
-                </div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -157,14 +160,14 @@ function Index() {
             The Entdecker Standard
           </h2>
           <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
-            {stats.map((stat) => (
-              <div key={stat.label} className="flex flex-col items-center">
+            {stats.map((stat, i) => (
+              <Reveal key={stat.label} delay={i * 80} className="flex flex-col items-center">
                 <span className="material-symbols-outlined mb-4 text-[48px] text-savannah-gold">
                   {stat.icon}
                 </span>
                 <h4 className="mb-2 text-headline-md text-deep-forest">{stat.value}</h4>
                 <p className="label text-on-surface-variant">{stat.label}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </section>
