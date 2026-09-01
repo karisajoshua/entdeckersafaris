@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
+import featureImg from "../assets/feature-nairobi-park.jpg";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -48,8 +49,11 @@ function About() {
         <section className="relative h-[420px] overflow-hidden">
           <img
             className="h-full w-full object-cover"
-            alt="Forest landscape meeting minimalist modern architecture"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR5fG7nxYh9OtklplJtEkqXhXjPmqzhdpOKUdS6oH7DA7VZdJv2VSiIOt2o7FIGPKzQzIBwoNn_mlI_pfli8YDfP6H78RapW1et7dg9z1WuyIBTB_E3Wl8gtA43ya8MZOiuGrP7UcXF1dxVaOE8X0IIc1UvYlPJSZJP97V_iBcS5EYRJYuaROcuC-0JwOOjk5atXicjgQGtqE6bh-1JMqbxJz8VJRMRe9ZbdKYDFqRl8PDP9Nvo0cz"
+            alt="Giraffes grazing in Nairobi National Park with the city skyline behind"
+            src={featureImg}
+            width={1280}
+            height={1024}
+            loading="lazy"
           />
         </section>
 

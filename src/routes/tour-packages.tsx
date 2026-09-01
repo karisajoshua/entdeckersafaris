@@ -51,6 +51,9 @@ function TourPackages() {
                 <img
                   alt={tour.alt}
                   src={tour.image}
+                  width={1024}
+                  height={768}
+                  loading="lazy"
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute right-4 top-4 rounded-sm border border-deep-forest/10 bg-surface/90 px-3 py-1 backdrop-blur-sm">
