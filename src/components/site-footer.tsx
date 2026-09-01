@@ -14,9 +14,9 @@ export function SiteFooter() {
             <img
               src={logo.url}
               alt="Entdecker Safaris logo"
-              className="h-32 w-auto mix-blend-multiply md:h-36"
-              width={1536}
-              height={1024}
+              className="h-32 w-auto md:h-36"
+              width={940}
+              height={800}
               loading="lazy"
             />
 
