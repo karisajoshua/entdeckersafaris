@@ -119,6 +119,37 @@ export function SiteHeader() {
               {link.label}
             </Link>
           ))}
+
+          {!loading && (
+            <div className="mt-2 flex flex-col gap-1 border-t border-deep-forest/10 pt-2">
+              {user ? (
+                <>
+                  <Link
+                    to="/admin"
+                    onClick={() => setOpen(false)}
+                    className="label py-3 text-savannah-gold"
+                  >
+                    Admin
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => void handleSignOut()}
+                    className="label py-3 text-left text-on-surface-variant"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/auth"
+                  onClick={() => setOpen(false)}
+                  className="label py-3 text-savannah-gold"
+                >
+                  Sign In
+                </Link>
+              )}
+            </div>
+          )}
         </nav>
       )}
     </header>
