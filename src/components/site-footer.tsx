@@ -102,6 +102,20 @@ export function SiteFooter() {
         <p className="label text-surface-variant/50">
           © 2026 Entdecker Safaris. All rights reserved.
         </p>
+        <p className="label mt-3 flex flex-wrap items-center justify-center gap-4 text-surface-variant/50">
+          <Link
+            to="/privacy"
+            className="transition-colors duration-200 hover:text-savannah-gold"
+          >
+            Privacy Policy
+          </Link>
+          <Link
+            to="/terms"
+            className="transition-colors duration-200 hover:text-savannah-gold"
+          >
+            Terms of Service
+          </Link>
+        </p>
         <p className="label mt-2 text-surface-variant/40">
           Powered by Texcortech Systems
         </p>

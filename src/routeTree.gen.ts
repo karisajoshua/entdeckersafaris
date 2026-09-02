@@ -16,6 +16,8 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TourPackagesRouteImport } from './routes/tour-packages'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -58,6 +60,16 @@ const ContactRoute = ContactRouteImport.update({
 const GalleryRoute = GalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TourPackagesRoute = TourPackagesRouteImport.update({
@@ -115,6 +127,8 @@ export interface FileRoutesByFullPath {
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/gallery': typeof GalleryRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
   '/tour-packages': typeof TourPackagesRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
@@ -132,6 +146,8 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/gallery': typeof GalleryRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
   '/tour-packages': typeof TourPackagesRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/tours/$slug': typeof ToursSlugRoute
@@ -150,6 +166,8 @@ export interface FileRoutesById {
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/gallery': typeof GalleryRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
   '/tour-packages': typeof TourPackagesRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
@@ -169,6 +187,8 @@ export interface FileRouteTypes {
     | '/blog'
     | '/contact'
     | '/gallery'
+    | '/privacy'
+    | '/terms'
     | '/tour-packages'
     | '/admin'
     | '/blog/$slug'
@@ -186,6 +206,8 @@ export interface FileRouteTypes {
     | '/blog'
     | '/contact'
     | '/gallery'
+    | '/privacy'
+    | '/terms'
     | '/tour-packages'
     | '/blog/$slug'
     | '/tours/$slug'
@@ -203,6 +225,8 @@ export interface FileRouteTypes {
     | '/blog'
     | '/contact'
     | '/gallery'
+    | '/privacy'
+    | '/terms'
     | '/tour-packages'
     | '/_authenticated/admin'
     | '/blog/$slug'
@@ -222,6 +246,8 @@ export interface RootRouteChildren {
   BlogRoute: typeof BlogRouteWithChildren
   ContactRoute: typeof ContactRoute
   GalleryRoute: typeof GalleryRoute
+  PrivacyRoute: typeof PrivacyRoute
+  TermsRoute: typeof TermsRoute
   TourPackagesRoute: typeof TourPackagesRoute
   ToursSlugRoute: typeof ToursSlugRoute
 }
@@ -275,6 +301,20 @@ declare module '@tanstack/react-router' {
       path: '/gallery'
       fullPath: '/gallery'
       preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tour-packages': {
@@ -391,6 +431,8 @@ const rootRouteChildren: RootRouteChildren = {
   BlogRoute: BlogRouteWithChildren,
   ContactRoute: ContactRoute,
   GalleryRoute: GalleryRoute,
+  PrivacyRoute: PrivacyRoute,
+  TermsRoute: TermsRoute,
   TourPackagesRoute: TourPackagesRoute,
   ToursSlugRoute: ToursSlugRoute,
 }
