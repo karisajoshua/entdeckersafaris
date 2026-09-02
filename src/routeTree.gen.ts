@@ -17,6 +17,7 @@ import { Route as BlogRouteImport } from './routes/blog'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TourPackagesRouteImport } from './routes/tour-packages'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -64,6 +65,11 @@ const GalleryRoute = GalleryRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TourPackagesRoute = TourPackagesRouteImport.update({
@@ -122,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/gallery': typeof GalleryRoute
   '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
   '/tour-packages': typeof TourPackagesRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
@@ -140,6 +147,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/gallery': typeof GalleryRoute
   '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
   '/tour-packages': typeof TourPackagesRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/tours/$slug': typeof ToursSlugRoute
@@ -159,6 +167,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/gallery': typeof GalleryRoute
   '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
   '/tour-packages': typeof TourPackagesRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
@@ -179,6 +188,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/gallery'
     | '/privacy'
+    | '/terms'
     | '/tour-packages'
     | '/admin'
     | '/blog/$slug'
@@ -197,6 +207,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/gallery'
     | '/privacy'
+    | '/terms'
     | '/tour-packages'
     | '/blog/$slug'
     | '/tours/$slug'
@@ -215,6 +226,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/gallery'
     | '/privacy'
+    | '/terms'
     | '/tour-packages'
     | '/_authenticated/admin'
     | '/blog/$slug'
@@ -235,6 +247,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   GalleryRoute: typeof GalleryRoute
   PrivacyRoute: typeof PrivacyRoute
+  TermsRoute: typeof TermsRoute
   TourPackagesRoute: typeof TourPackagesRoute
   ToursSlugRoute: typeof ToursSlugRoute
 }
@@ -295,6 +308,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tour-packages': {
@@ -412,6 +432,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   GalleryRoute: GalleryRoute,
   PrivacyRoute: PrivacyRoute,
+  TermsRoute: TermsRoute,
   TourPackagesRoute: TourPackagesRoute,
   ToursSlugRoute: ToursSlugRoute,
 }
