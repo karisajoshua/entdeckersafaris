@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 
@@ -69,18 +68,6 @@ function AuthPage() {
     }
   }
 
-  async function onGoogle() {
-    setError(null);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    if (result.error) {
-      setError("Google sign-in failed. Please try again.");
-      return;
-    }
-    if (result.redirected) return;
-    await navigate({ to: "/admin" });
-  }
 
   return (
     <div className="flex min-h-screen flex-col bg-surface">
@@ -141,13 +128,6 @@ function AuthPage() {
           </button>
         </form>
 
-        <button
-          type="button"
-          onClick={() => void onGoogle()}
-          className="label mt-4 w-full rounded-sm border border-deep-forest/20 px-8 py-4 text-deep-forest transition-colors hover:border-deep-forest"
-        >
-          {mode === "signup" ? "Sign up with Google" : "Continue with Google"}
-        </button>
 
         <button
           type="button"
