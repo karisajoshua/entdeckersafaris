@@ -53,14 +53,19 @@ function AuthPage() {
         if (signInError) throw signInError;
         await navigate({ to: "/admin" });
       } else {
-        const { error: signUpError } = await supabase.auth.signUp({
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: `${window.location.origin}/admin` },
         });
         if (signUpError) throw signUpError;
-        setMessage("Account created. If confirmation is required, check your inbox.");
+        if (signUpData.session) {
+          await navigate({ to: "/admin" });
+        } else {
+          setMessage("Account created. You can sign in now.");
+          setMode("signin");
+        }
       }
+
     } catch (err) {
       setError(err instanceof Error ? err.message : "Sign in failed");
     } finally {
