@@ -100,10 +100,14 @@ function About() {
         <section className="bg-surface-container-low px-gutter py-section-mobile md:py-section-desktop">
           <div className="mx-auto max-w-(--container-max)">
             <Reveal>
-              <h2 className="mb-12 text-center text-headline-md text-deep-forest">
+              <h2 className="mb-6 text-center text-headline-md text-deep-forest">
                 Why Entdecker Safaris
               </h2>
+              <div className="gold-rule mb-12" aria-hidden="true">
+                <span />
+              </div>
             </Reveal>
+
             <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
               {reasons.map((reason, i) => (
                 <Reveal key={reason.label} delay={i * 80}>
