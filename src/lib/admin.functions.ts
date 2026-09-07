@@ -70,14 +70,22 @@ export const adminListGallery = createServerFn({ method: "GET" })
     }));
   });
 
+const slugify = (value: string) =>
+  value
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+const slugField = z.preprocess(
+  (value) => (typeof value === "string" ? slugify(value) : value),
+  z.string().min(1, "Enter a name or slug").max(80),
+);
+
 const locationSchema = z.object({
   id: z.string().uuid().optional(),
-  slug: z
-    .string()
-    .trim()
-    .min(1)
-    .max(80)
-    .regex(/^[a-z0-9-]+$/, "Use lowercase letters, numbers and hyphens"),
+  slug: slugField,
   name: z.string().trim().min(1).max(120),
   blurb: z.string().trim().max(2000).default(""),
   sortOrder: z.number().int().min(0).max(999).default(0),
