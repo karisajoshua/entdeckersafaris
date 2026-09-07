@@ -37,9 +37,10 @@ export function SiteHeader() {
             src={logo.url}
             alt="Entdecker Safaris logo"
             className="h-24 w-auto md:h-28"
-            width={940}
-            height={800}
+            width={1016}
+            height={1020}
           />
+
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex">
