@@ -70,14 +70,22 @@ export const adminListGallery = createServerFn({ method: "GET" })
     }));
   });
 
+const slugify = (value: string) =>
+  value
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+const slugField = z.preprocess(
+  (value) => (typeof value === "string" ? slugify(value) : value),
+  z.string().min(1, "Enter a name or slug").max(80),
+);
+
 const locationSchema = z.object({
   id: z.string().uuid().optional(),
-  slug: z
-    .string()
-    .trim()
-    .min(1)
-    .max(80)
-    .regex(/^[a-z0-9-]+$/, "Use lowercase letters, numbers and hyphens"),
+  slug: slugField,
   name: z.string().trim().min(1).max(120),
   blurb: z.string().trim().max(2000).default(""),
   sortOrder: z.number().int().min(0).max(999).default(0),
@@ -186,12 +194,7 @@ const blockSchema = z.object({
 
 const postSchema = z.object({
   id: z.string().uuid().optional(),
-  slug: z
-    .string()
-    .trim()
-    .min(1)
-    .max(120)
-    .regex(/^[a-z0-9-]+$/, "Use lowercase letters, numbers and hyphens"),
+  slug: slugField,
   title: z.string().trim().min(1).max(200),
   excerpt: z.string().trim().max(600).default(""),
   author: z.string().trim().min(1).max(120).default("Entdecker Safaris"),
@@ -274,12 +277,7 @@ const stepSchema = z.object({
 
 const tourSchema = z.object({
   id: z.string().uuid().optional(),
-  slug: z
-    .string()
-    .trim()
-    .min(1)
-    .max(120)
-    .regex(/^[a-z0-9-]+$/, "Use lowercase letters, numbers and hyphens"),
+  slug: slugField,
   title: z.string().trim().min(1).max(200),
   tagline: z.string().trim().max(400).default(""),
   duration: z.string().trim().max(60).default(""),

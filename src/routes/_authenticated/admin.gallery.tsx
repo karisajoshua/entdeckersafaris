@@ -34,6 +34,14 @@ type LocationForm = {
 
 const emptyLocation: LocationForm = { slug: "", name: "", blurb: "", sortOrder: 0 };
 
+const slugify = (value: string) =>
+  value
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+/, "");
+
 function AdminGallery() {
   const queryClient = useQueryClient();
   const list = useServerFn(adminListGallery);
@@ -126,19 +134,26 @@ function AdminGallery() {
                 className={inputClass}
                 value={locationForm.name}
                 required
-                onChange={(event) =>
-                  setLocationForm({ ...locationForm, name: event.target.value })
-                }
+                onChange={(event) => {
+                  const name = event.target.value;
+                  const autoSlug =
+                    !locationForm.slug || locationForm.slug === slugify(locationForm.name);
+                  setLocationForm({
+                    ...locationForm,
+                    name,
+                    slug: autoSlug ? slugify(name) : locationForm.slug,
+                  });
+                }}
               />
             </Field>
-            <Field label="Slug">
+            <Field label="Web address">
               <input
                 className={inputClass}
                 value={locationForm.slug}
                 required
                 placeholder="masai-mara"
                 onChange={(event) =>
-                  setLocationForm({ ...locationForm, slug: event.target.value })
+                  setLocationForm({ ...locationForm, slug: slugify(event.target.value) })
                 }
               />
             </Field>
