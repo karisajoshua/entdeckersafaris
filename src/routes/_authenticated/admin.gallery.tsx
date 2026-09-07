@@ -126,19 +126,26 @@ function AdminGallery() {
                 className={inputClass}
                 value={locationForm.name}
                 required
-                onChange={(event) =>
-                  setLocationForm({ ...locationForm, name: event.target.value })
-                }
+                onChange={(event) => {
+                  const name = event.target.value;
+                  const autoSlug =
+                    !locationForm.slug || locationForm.slug === slugify(locationForm.name);
+                  setLocationForm({
+                    ...locationForm,
+                    name,
+                    slug: autoSlug ? slugify(name) : locationForm.slug,
+                  });
+                }}
               />
             </Field>
-            <Field label="Slug">
+            <Field label="Web address">
               <input
                 className={inputClass}
                 value={locationForm.slug}
                 required
                 placeholder="masai-mara"
                 onChange={(event) =>
-                  setLocationForm({ ...locationForm, slug: event.target.value })
+                  setLocationForm({ ...locationForm, slug: slugify(event.target.value) })
                 }
               />
             </Field>
