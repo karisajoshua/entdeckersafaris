@@ -95,6 +95,29 @@
   );
 }
 
+@utility gold-rule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  &::before,
+  &::after {
+    content: "";
+    height: 1px;
+    width: 64px;
+    background: color-mix(in oklab, var(--color-savannah-gold) 70%, transparent);
+  }
+
+  & > span {
+    width: 6px;
+    height: 6px;
+    rotate: 45deg;
+    background: var(--color-savannah-gold);
+  }
+}
+
+
 .material-symbols-outlined {
   font-family: "Material Symbols Outlined";
   font-weight: normal;
