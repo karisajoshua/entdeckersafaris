@@ -159,9 +159,13 @@ function Index() {
 
         {/* Standard */}
         <section className="mx-auto max-w-(--container-max) border-t border-deep-forest/10 px-gutter py-section-mobile md:py-section-desktop">
-          <h2 className="mb-16 text-center text-headline-md text-deep-forest">
+          <h2 className="mb-6 text-center text-headline-md text-deep-forest">
             The Entdecker Standard
           </h2>
+          <div className="gold-rule mb-14" aria-hidden="true">
+            <span />
+          </div>
+
           <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
             {stats.map((stat, i) => (
               <Reveal key={stat.label} delay={i * 80} className="flex flex-col items-center">
