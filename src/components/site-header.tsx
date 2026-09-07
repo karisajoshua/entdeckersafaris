@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/use-session";
-import logo from "../assets/entdecker-logo.png.asset.json";
+import logo from "../assets/entdecker-badge.png.asset.json";
 
 const links = [
   { to: "/", label: "Home" },
@@ -30,16 +30,17 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="fixed top-0 z-50 w-full border-b border-deep-forest/10 bg-surface/90 backdrop-blur-md transition-all duration-300">
+    <header className="fixed top-0 z-50 w-full border-b border-savannah-gold/30 bg-surface/90 backdrop-blur-md transition-all duration-300">
       <div className="mx-auto flex max-w-(--container-max) items-center justify-between px-gutter py-3">
         <Link to="/" className="flex items-center" aria-label="Entdecker Safaris home">
           <img
             src={logo.url}
             alt="Entdecker Safaris logo"
             className="h-24 w-auto md:h-28"
-            width={940}
-            height={800}
+            width={1016}
+            height={1020}
           />
+
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex">

@@ -5,17 +5,18 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-deep-forest: #1b2a1d;
+  --color-deep-forest: #26251f;
   --color-savannah-gold: #c98b27;
-  --color-horizon-sand: #f9f6f1;
+  --color-horizon-sand: #f8f4ea;
   --color-twilight-ink: #121212;
-  --color-surface: #fbf9f6;
-  --color-surface-dim: #dbdad7;
-  --color-surface-variant: #e4e2df;
-  --color-surface-container-low: #f5f3f0;
+  --color-surface: #fbf8f2;
+  --color-surface-dim: #dcd8ce;
+  --color-surface-variant: #e6e1d6;
+  --color-surface-container-low: #f5f1e8;
   --color-surface-container-lowest: #ffffff;
-  --color-on-surface: #1b1c1a;
-  --color-on-surface-variant: #434842;
+  --color-on-surface: #1c1b17;
+  --color-on-surface-variant: #46443c;
+
 
   --color-background: var(--color-surface);
   --color-foreground: var(--color-on-surface);
@@ -50,8 +51,8 @@
   --radius-lg: 0.25rem;
   --radius-xl: 0.5rem;
 
-  --shadow-editorial: 0 10px 40px rgba(27, 42, 29, 0.05);
-  --shadow-editorial-lg: 0 15px 50px rgba(27, 42, 29, 0.12);
+  --shadow-editorial: 0 10px 40px rgba(38, 37, 31, 0.05);
+  --shadow-editorial-lg: 0 15px 50px rgba(38, 37, 31, 0.12);
 }
 
 @layer base {
@@ -89,10 +90,33 @@
 @utility hero-overlay {
   background: linear-gradient(
     to bottom,
-    rgba(27, 42, 29, 0.2) 0%,
-    rgba(27, 42, 29, 0.6) 100%
+    rgba(38, 37, 31, 0.2) 0%,
+    rgba(38, 37, 31, 0.6) 100%
   );
 }
+
+@utility gold-rule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  &::before,
+  &::after {
+    content: "";
+    height: 1px;
+    width: 64px;
+    background: color-mix(in oklab, var(--color-savannah-gold) 70%, transparent);
+  }
+
+  & > span {
+    width: 6px;
+    height: 6px;
+    rotate: 45deg;
+    background: var(--color-savannah-gold);
+  }
+}
+
 
 .material-symbols-outlined {
   font-family: "Material Symbols Outlined";
