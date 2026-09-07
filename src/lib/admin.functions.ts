@@ -194,12 +194,7 @@ const blockSchema = z.object({
 
 const postSchema = z.object({
   id: z.string().uuid().optional(),
-  slug: z
-    .string()
-    .trim()
-    .min(1)
-    .max(120)
-    .regex(/^[a-z0-9-]+$/, "Use lowercase letters, numbers and hyphens"),
+  slug: slugField,
   title: z.string().trim().min(1).max(200),
   excerpt: z.string().trim().max(600).default(""),
   author: z.string().trim().min(1).max(120).default("Entdecker Safaris"),
@@ -282,12 +277,7 @@ const stepSchema = z.object({
 
 const tourSchema = z.object({
   id: z.string().uuid().optional(),
-  slug: z
-    .string()
-    .trim()
-    .min(1)
-    .max(120)
-    .regex(/^[a-z0-9-]+$/, "Use lowercase letters, numbers and hyphens"),
+  slug: slugField,
   title: z.string().trim().min(1).max(200),
   tagline: z.string().trim().max(400).default(""),
   duration: z.string().trim().max(60).default(""),
