@@ -3,7 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { getMyAccess } from "../../lib/admin.functions";
-import logo from "../../assets/entdecker-logo.png.asset.json";
+import logo from "../../assets/entdecker-badge.png.asset.json";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({

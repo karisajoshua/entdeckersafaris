@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import logo from "../assets/entdecker-logo.png.asset.json";
+import logo from "../assets/entdecker-badge.png.asset.json";
 
 export function SiteFooter() {
   return (
