@@ -34,6 +34,14 @@ type LocationForm = {
 
 const emptyLocation: LocationForm = { slug: "", name: "", blurb: "", sortOrder: 0 };
 
+const slugify = (value: string) =>
+  value
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+/, "");
+
 function AdminGallery() {
   const queryClient = useQueryClient();
   const list = useServerFn(adminListGallery);
