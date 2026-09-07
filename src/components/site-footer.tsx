@@ -8,19 +8,19 @@ export function SiteFooter() {
         <div className="col-span-1 pr-8 md:col-span-2">
           <Link
             to="/"
-            className="mb-6 inline-block rounded-lg bg-horizon-sand px-6 py-4"
+            className="mb-6 inline-block"
             aria-label="Entdecker Safaris home"
           >
             <img
               src={logo.url}
               alt="Entdecker Safaris logo"
-              className="h-32 w-auto md:h-36"
-              width={940}
-              height={800}
+              className="h-36 w-auto md:h-44"
+              width={1016}
+              height={1020}
               loading="lazy"
             />
-
           </Link>
+
           <p className="max-w-[400px] text-body-md text-surface-variant/70">
             Crafting luxurious, organic, and highly personalized safari experiences across Kenya's
             most breathtaking landscapes.
