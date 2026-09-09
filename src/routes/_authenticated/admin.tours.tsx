@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminListTours, deleteTour, saveTour } from "../../lib/admin.functions";
 import type { ItineraryStep, Tour } from "../../lib/content-types";
+import { suggestTourText } from "../../lib/ai-content.functions";
 import { ImageUpload } from "../../components/admin/image-upload";
 import {
   Card,
@@ -69,8 +70,11 @@ function AdminTours() {
   const save = useServerFn(saveTour);
   const remove = useServerFn(deleteTour);
 
+  const writeTour = useServerFn(suggestTourText);
+
   const [form, setForm] = useState<TourForm | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [writing, setWriting] = useState(false);
 
   const { data, isPending } = useQuery({ queryKey: ["admin", "tours"], queryFn: () => list() });
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["admin", "tours"] });
@@ -95,6 +99,31 @@ function AdminTours() {
     },
     onError: fail,
   });
+
+  async function writeWithAi() {
+    if (!form?.title.trim()) {
+      setError("Add the tour title first, then let AI write.");
+      return;
+    }
+    setWriting(true);
+    try {
+      const result = await writeTour({ data: { title: form.title, duration: form.duration } });
+      setForm((current) =>
+        current
+          ? {
+              ...current,
+              tagline: result.tagline,
+              intro: result.intro.length > 0 ? result.intro : current.intro,
+            }
+          : current,
+      );
+      setError(null);
+    } catch (err) {
+      fail(err);
+    } finally {
+      setWriting(false);
+    }
+  }
 
   const removeMutation = useMutation({
     mutationFn: (id: string) => remove({ data: { id } }),
@@ -156,6 +185,20 @@ function AdminTours() {
                 onChange={(event) => setForm({ ...form, duration: event.target.value })}
               />
             </Field>
+            <div className="space-y-3 rounded-sm border border-savannah-gold/40 bg-savannah-gold/5 p-4 md:col-span-2">
+              <button
+                type="button"
+                className={ghostButton}
+                disabled={writing}
+                onClick={() => void writeWithAi()}
+              >
+                {writing ? "Writing…" : "Write tagline and intro with AI"}
+              </button>
+              <p className="text-body-md text-on-surface-variant">
+                Uses the title and duration above. You can edit everything before saving.
+              </p>
+            </div>
+
             <div className="md:col-span-2">
               <ImageUpload
                 value={form.image}
