@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminListPosts, deletePost, savePost } from "../../lib/admin.functions";
 import type { BlogBlock, BlogPost } from "../../lib/content-types";
+import { suggestPostText } from "../../lib/ai-content.functions";
 import { ImageUpload } from "../../components/admin/image-upload";
 import {
   Card,
@@ -62,14 +63,26 @@ function toForm(post: BlogPost): PostForm {
   };
 }
 
+const slugify = (value: string) =>
+  value
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
 function AdminBlog() {
   const queryClient = useQueryClient();
   const list = useServerFn(adminListPosts);
   const save = useServerFn(savePost);
   const remove = useServerFn(deletePost);
 
+  const writePost = useServerFn(suggestPostText);
+
   const [form, setForm] = useState<PostForm | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [topic, setTopic] = useState("");
+  const [writing, setWriting] = useState(false);
 
   const { data, isPending } = useQuery({ queryKey: ["admin", "posts"], queryFn: () => list() });
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["admin", "posts"] });
@@ -85,6 +98,35 @@ function AdminBlog() {
     },
     onError: fail,
   });
+
+  async function writeWithAi() {
+    if (!form) return;
+    const prompt = topic.trim() || form.title.trim();
+    if (!prompt) {
+      setError("Add a title or a short idea first, then let AI write.");
+      return;
+    }
+    setWriting(true);
+    try {
+      const result = await writePost({ data: { topic: prompt, title: form.title } });
+      setForm((current) =>
+        current
+          ? {
+              ...current,
+              title: current.title || result.title,
+              slug: current.slug || slugify(result.title),
+              excerpt: result.excerpt,
+              body: result.body.length > 0 ? result.body : current.body,
+            }
+          : current,
+      );
+      setError(null);
+    } catch (err) {
+      fail(err);
+    } finally {
+      setWriting(false);
+    }
+  }
 
   const removeMutation = useMutation({
     mutationFn: (id: string) => remove({ data: { id } }),
@@ -156,6 +198,28 @@ function AdminBlog() {
                 />
               </Field>
             </div>
+            <div className="space-y-3 rounded-sm border border-savannah-gold/40 bg-savannah-gold/5 p-4 md:col-span-2">
+              <Field label="Write with AI — what is the article about?">
+                <input
+                  className={inputClass}
+                  value={topic}
+                  placeholder="Best time to see the Great Migration in the Masai Mara"
+                  onChange={(event) => setTopic(event.target.value)}
+                />
+              </Field>
+              <button
+                type="button"
+                className={ghostButton}
+                disabled={writing}
+                onClick={() => void writeWithAi()}
+              >
+                {writing ? "Writing the article…" : "Write with AI"}
+              </button>
+              <p className="text-body-md text-on-surface-variant">
+                AI fills in the excerpt and a full draft body you can edit before publishing.
+              </p>
+            </div>
+
             <div className="md:col-span-2">
               <ImageUpload
                 value={form.cover}

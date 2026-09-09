@@ -9,7 +9,8 @@ import {
   saveGalleryLocation,
   saveGalleryPhoto,
 } from "../../lib/admin.functions";
-import { ImageUpload } from "../../components/admin/image-upload";
+import { suggestLocationBlurb, suggestPhotoText } from "../../lib/ai-content.functions";
+import { MultiImageUpload, type UploadedImage } from "../../components/admin/multi-image-upload";
 import {
   Card,
   Field,
@@ -32,6 +33,16 @@ type LocationForm = {
   sortOrder: number;
 };
 
+type StagedPhoto = {
+  key: string;
+  url: string;
+  filename: string;
+  alt: string;
+  caption: string;
+  writing: boolean;
+  note: string | null;
+};
+
 const emptyLocation: LocationForm = { slug: "", name: "", blurb: "", sortOrder: 0 };
 
 const slugify = (value: string) =>
@@ -49,12 +60,14 @@ function AdminGallery() {
   const removeLocation = useServerFn(deleteGalleryLocation);
   const savePhoto = useServerFn(saveGalleryPhoto);
   const removePhoto = useServerFn(deleteGalleryPhoto);
+  const writePhotoText = useServerFn(suggestPhotoText);
+  const writeBlurb = useServerFn(suggestLocationBlurb);
 
   const [locationForm, setLocationForm] = useState<LocationForm | null>(null);
+  const [blurbBusy, setBlurbBusy] = useState(false);
   const [photoFor, setPhotoFor] = useState<string | null>(null);
-  const [photoUrl, setPhotoUrl] = useState("");
-  const [photoAlt, setPhotoAlt] = useState("");
-  const [photoCaption, setPhotoCaption] = useState("");
+  const [staged, setStaged] = useState<StagedPhoto[]>([]);
+  const [savingAll, setSavingAll] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const { data, isPending } = useQuery({
@@ -82,25 +95,94 @@ function AdminGallery() {
     onError: fail,
   });
 
-  const photoMutation = useMutation({
-    mutationFn: (input: { locationId: string; imageUrl: string; alt: string; caption: string }) =>
-      savePhoto({ data: input }),
-    onSuccess: () => {
-      setPhotoFor(null);
-      setPhotoUrl("");
-      setPhotoAlt("");
-      setPhotoCaption("");
-      setError(null);
-      invalidate();
-    },
-    onError: fail,
-  });
-
   const photoDelete = useMutation({
     mutationFn: (id: string) => removePhoto({ data: { id } }),
     onSuccess: invalidate,
     onError: fail,
   });
+
+  const patchStaged = (key: string, patch: Partial<StagedPhoto>) =>
+    setStaged((rows) => rows.map((row) => (row.key === key ? { ...row, ...patch } : row)));
+
+  async function describe(row: StagedPhoto, locationName: string) {
+    patchStaged(row.key, { writing: true, note: null });
+    try {
+      const result = await writePhotoText({
+        data: { imageUrl: row.url, location: locationName },
+      });
+      patchStaged(row.key, {
+        alt: result.alt,
+        caption: result.caption,
+        writing: false,
+      });
+    } catch (err) {
+      patchStaged(row.key, {
+        writing: false,
+        note: err instanceof Error ? err.message : "AI could not describe this photo",
+      });
+    }
+  }
+
+  function stageUploads(images: UploadedImage[], locationName: string) {
+    const rows: StagedPhoto[] = images.map((image) => ({
+      key: `${image.url}-${Math.random().toString(36).slice(2)}`,
+      url: image.url,
+      filename: image.filename,
+      alt: "",
+      caption: "",
+      writing: true,
+      note: null,
+    }));
+    setStaged((current) => [...current, ...rows]);
+    void Promise.all(rows.map((row) => describe(row, locationName)));
+  }
+
+  async function generateBlurb() {
+    if (!locationForm?.name) return;
+    setBlurbBusy(true);
+    try {
+      const result = await writeBlurb({ data: { name: locationForm.name } });
+      setLocationForm((current) => (current ? { ...current, blurb: result.blurb } : current));
+      setError(null);
+    } catch (err) {
+      fail(err);
+    } finally {
+      setBlurbBusy(false);
+    }
+  }
+
+  async function saveAll(locationId: string, startIndex: number) {
+    setSavingAll(true);
+    setError(null);
+    const failures: string[] = [];
+    let index = startIndex;
+    for (const row of staged) {
+      try {
+        await savePhoto({
+          data: {
+            locationId,
+            imageUrl: row.url,
+            alt: row.alt,
+            caption: row.caption,
+            sortOrder: index,
+          },
+        });
+        index += 1;
+      } catch (err) {
+        failures.push(row.filename);
+        if (err instanceof Error) setError(err.message);
+      }
+    }
+    setSavingAll(false);
+    if (failures.length > 0) {
+      setError(`These photos could not be added: ${failures.join(", ")}`);
+      setStaged((rows) => rows.filter((row) => failures.includes(row.filename)));
+    } else {
+      setStaged([]);
+      setPhotoFor(null);
+    }
+    invalidate();
+  }
 
   return (
     <div>
@@ -168,6 +250,14 @@ function AdminGallery() {
                   }
                 />
               </Field>
+              <button
+                type="button"
+                className={`${ghostButton} mt-3`}
+                disabled={blurbBusy || !locationForm.name}
+                onClick={() => void generateBlurb()}
+              >
+                {blurbBusy ? "Writing…" : "Write with AI"}
+              </button>
             </div>
             <Field label="Sort order">
               <input
@@ -231,9 +321,12 @@ function AdminGallery() {
                 <button
                   type="button"
                   className={ghostButton}
-                  onClick={() => setPhotoFor(photoFor === location.id ? null : location.id)}
+                  onClick={() => {
+                    setStaged([]);
+                    setPhotoFor(photoFor === location.id ? null : location.id);
+                  }}
                 >
-                  Add photo
+                  Add photos
                 </button>
                 <button
                   type="button"
@@ -249,45 +342,93 @@ function AdminGallery() {
             </div>
 
             {photoFor === location.id && (
-              <form
-                className="mt-6 grid gap-4 border-t border-deep-forest/10 pt-6 md:grid-cols-2"
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  photoMutation.mutate({
-                    locationId: location.id,
-                    imageUrl: photoUrl,
-                    alt: photoAlt,
-                    caption: photoCaption,
-                  });
-                }}
-              >
-                <div className="md:col-span-2">
-                  <ImageUpload value={photoUrl} onChange={setPhotoUrl} label="Photo" />
-                </div>
-                <Field label="Alt text">
-                  <input
-                    className={inputClass}
-                    value={photoAlt}
-                    onChange={(event) => setPhotoAlt(event.target.value)}
-                  />
-                </Field>
-                <Field label="Caption">
-                  <input
-                    className={inputClass}
-                    value={photoCaption}
-                    onChange={(event) => setPhotoCaption(event.target.value)}
-                  />
-                </Field>
-                <div className="md:col-span-2">
-                  <button
-                    type="submit"
-                    className={primaryButton}
-                    disabled={photoMutation.isPending || !photoUrl}
-                  >
-                    Add photo
-                  </button>
-                </div>
-              </form>
+              <div className="mt-6 space-y-6 border-t border-deep-forest/10 pt-6">
+                <MultiImageUpload
+                  label="Add photos"
+                  onUploaded={(images) => stageUploads(images, location.name)}
+                />
+
+                {staged.length > 0 && (
+                  <div className="space-y-4">
+                    <p className="label text-on-surface-variant">
+                      {staged.length} photo{staged.length === 1 ? "" : "s"} ready — check the AI text,
+                      then save.
+                    </p>
+                    {staged.map((row) => (
+                      <div
+                        key={row.key}
+                        className="grid gap-4 rounded-sm border border-deep-forest/10 p-4 md:grid-cols-[8rem_1fr_1fr_auto]"
+                      >
+                        <img
+                          src={row.url}
+                          alt=""
+                          className="h-24 w-full rounded-sm object-cover md:w-32"
+                        />
+                        <Field label="Alt text">
+                          <input
+                            className={inputClass}
+                            value={row.alt}
+                            placeholder={row.writing ? "AI is looking at the photo…" : ""}
+                            onChange={(event) =>
+                              patchStaged(row.key, { alt: event.target.value })
+                            }
+                          />
+                        </Field>
+                        <Field label="Caption">
+                          <input
+                            className={inputClass}
+                            value={row.caption}
+                            placeholder={row.writing ? "AI is writing…" : ""}
+                            onChange={(event) =>
+                              patchStaged(row.key, { caption: event.target.value })
+                            }
+                          />
+                        </Field>
+                        <div className="flex flex-col justify-end gap-2">
+                          <button
+                            type="button"
+                            className={ghostButton}
+                            disabled={row.writing}
+                            onClick={() => void describe(row, location.name)}
+                          >
+                            {row.writing ? "Writing…" : "Redo AI text"}
+                          </button>
+                          <button
+                            type="button"
+                            className={dangerButton}
+                            onClick={() =>
+                              setStaged((rows) => rows.filter((item) => item.key !== row.key))
+                            }
+                          >
+                            Remove
+                          </button>
+                          {row.note && <p className="text-body-md text-red-700">{row.note}</p>}
+                        </div>
+                      </div>
+                    ))}
+                    <div className="flex flex-wrap gap-3">
+                      <button
+                        type="button"
+                        className={primaryButton}
+                        disabled={savingAll || staged.some((row) => row.writing)}
+                        onClick={() => void saveAll(location.id, location.photos.length)}
+                      >
+                        {savingAll ? "Saving…" : `Save all ${staged.length}`}
+                      </button>
+                      <button
+                        type="button"
+                        className={ghostButton}
+                        onClick={() => {
+                          setStaged([]);
+                          setPhotoFor(null);
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
 
             {location.photos.length > 0 && (
