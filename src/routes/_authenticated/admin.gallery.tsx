@@ -40,7 +40,7 @@ type StagedPhoto = {
   alt: string;
   caption: string;
   writing: boolean;
-  note?: string;
+  note: string | null;
 };
 
 const emptyLocation: LocationForm = { slug: "", name: "", blurb: "", sortOrder: 0 };
@@ -105,7 +105,7 @@ function AdminGallery() {
     setStaged((rows) => rows.map((row) => (row.key === key ? { ...row, ...patch } : row)));
 
   async function describe(row: StagedPhoto, locationName: string) {
-    patchStaged(row.key, { writing: true, note: undefined });
+    patchStaged(row.key, { writing: true, note: null });
     try {
       const result = await writePhotoText({
         data: { imageUrl: row.url, location: locationName },
@@ -131,6 +131,7 @@ function AdminGallery() {
       alt: "",
       caption: "",
       writing: true,
+      note: null,
     }));
     setStaged((current) => [...current, ...rows]);
     void Promise.all(rows.map((row) => describe(row, locationName)));
