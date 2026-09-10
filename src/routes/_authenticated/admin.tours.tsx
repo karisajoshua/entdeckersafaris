@@ -65,6 +65,7 @@ function toForm(tour: Tour): TourForm {
     duration: tour.duration ?? "",
     image: tour.image ?? "",
     alt: tour.alt ?? "",
+    category: tour.category ?? "Safari Packages",
     intro: tour.intro.length > 0 ? tour.intro : [""],
     itinerary:
       tour.itinerary.length > 0 ? tour.itinerary : [{ marker: "Day 1", heading: "", body: "" }],
@@ -193,6 +194,19 @@ function AdminTours() {
                 placeholder="8 days"
                 onChange={(event) => setForm({ ...form, duration: event.target.value })}
               />
+            </Field>
+            <Field label="Category">
+              <select
+                className={inputClass}
+                value={form.category}
+                onChange={(event) => setForm({ ...form, category: event.target.value })}
+              >
+                {TOUR_CATEGORIES.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
             </Field>
             <div className="space-y-3 rounded-sm border border-savannah-gold/40 bg-savannah-gold/5 p-4 md:col-span-2">
               <button
