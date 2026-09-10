@@ -243,7 +243,7 @@ export const deletePost = createServerFn({ method: "POST" })
 /* ----------------------------------- tours ---------------------------------- */
 
 const TOUR_COLUMNS =
-  "id, slug, title, tagline, duration, image_url, image_alt, intro, itinerary, published, sort_order";
+  "id, slug, title, tagline, duration, image_url, image_alt, category, intro, itinerary, published, sort_order";
 
 function mapTour(row: any): Tour {
   return {
@@ -254,6 +254,7 @@ function mapTour(row: any): Tour {
     duration: row.duration,
     image: row.image_url,
     alt: row.image_alt,
+    category: row.category ?? "Safari Packages",
     intro: (Array.isArray(row.intro) ? row.intro : []) as string[],
     itinerary: (Array.isArray(row.itinerary) ? row.itinerary : []) as ItineraryStep[],
     published: row.published,
