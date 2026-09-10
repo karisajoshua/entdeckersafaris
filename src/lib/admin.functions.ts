@@ -243,7 +243,7 @@ export const deletePost = createServerFn({ method: "POST" })
 /* ----------------------------------- tours ---------------------------------- */
 
 const TOUR_COLUMNS =
-  "id, slug, title, tagline, duration, image_url, image_alt, intro, itinerary, published, sort_order";
+  "id, slug, title, tagline, duration, image_url, image_alt, category, intro, itinerary, published, sort_order";
 
 function mapTour(row: any): Tour {
   return {
@@ -254,6 +254,7 @@ function mapTour(row: any): Tour {
     duration: row.duration,
     image: row.image_url,
     alt: row.image_alt,
+    category: row.category ?? "Safari Packages",
     intro: (Array.isArray(row.intro) ? row.intro : []) as string[],
     itinerary: (Array.isArray(row.itinerary) ? row.itinerary : []) as ItineraryStep[],
     published: row.published,
@@ -283,6 +284,7 @@ const tourSchema = z.object({
   duration: z.string().trim().max(60).default(""),
   image: z.string().trim().max(2000).default(""),
   alt: z.string().trim().max(300).default(""),
+  category: z.string().trim().max(80).default("Safari Packages"),
   intro: z.array(z.string().trim().min(1).max(4000)).max(20).default([]),
   itinerary: z.array(stepSchema).max(40).default([]),
   published: z.boolean().default(true),
@@ -301,6 +303,7 @@ export const saveTour = createServerFn({ method: "POST" })
       duration: data.duration,
       image_url: data.image,
       image_alt: data.alt,
+      category: data.category,
       intro: data.intro,
       itinerary: data.itinerary,
       published: data.published,

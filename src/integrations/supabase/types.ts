@@ -165,6 +165,7 @@ export type Database = {
       }
       tours: {
         Row: {
+          category: string
           created_at: string
           duration: string
           id: string
@@ -180,6 +181,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          category?: string
           created_at?: string
           duration?: string
           id?: string
@@ -195,6 +197,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          category?: string
           created_at?: string
           duration?: string
           id?: string

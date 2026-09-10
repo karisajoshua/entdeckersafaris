@@ -42,6 +42,7 @@ export type Tour = {
   duration: string;
   image: string;
   alt: string;
+  category: string;
   intro: string[];
   itinerary: ItineraryStep[];
   published: boolean;
