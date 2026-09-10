@@ -3,6 +3,7 @@ import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 import { Reveal } from "../components/reveal";
 import { tourQuery } from "../lib/queries";
+import { whatsappLink } from "../components/whatsapp-button";
 
 export const Route = createFileRoute("/tours/$slug")({
   loader: async ({ context, params }) => {
@@ -123,12 +124,18 @@ function TourDetail() {
               Every journey is flexible — tell us your dates, budget and interests and we will adapt
               it to you.
             </p>
-            <Link
-              to="/contact"
+            <a
+              href={whatsappLink(
+                `Hello Entdecker Safaris! I'd like to enquire about the ${tour.title}${
+                  tour.duration ? ` (${tour.duration})` : ""
+                }.\n${tour.tagline}\nCould you share availability, pricing and what's included?`,
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
               className="label inline-block rounded-sm bg-deep-forest px-8 py-4 text-horizon-sand shadow-editorial transition-all hover:-translate-y-1"
             >
               Enquire About This Safari
-            </Link>
+            </a>
           </Reveal>
         </section>
       </main>
