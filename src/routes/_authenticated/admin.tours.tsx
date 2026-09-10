@@ -28,11 +28,19 @@ type TourForm = {
   duration: string;
   image: string;
   alt: string;
+  category: string;
   intro: string[];
   itinerary: ItineraryStep[];
   published: boolean;
   sortOrder: number;
 };
+
+export const TOUR_CATEGORIES = [
+  "Day Tours & Excursions",
+  "Safari Packages",
+  "Cross-Border Safaris",
+  "Adventure Safaris",
+] as const;
 
 const emptyTour: TourForm = {
   slug: "",
@@ -41,6 +49,7 @@ const emptyTour: TourForm = {
   duration: "",
   image: "",
   alt: "",
+  category: "Safari Packages",
   intro: [""],
   itinerary: [{ marker: "Day 1", heading: "", body: "" }],
   published: true,
