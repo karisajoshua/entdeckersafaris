@@ -1,0 +1,2 @@
+ALTER TABLE public.content_translations DROP CONSTRAINT content_translations_lang_check;
+ALTER TABLE public.content_translations ADD CONSTRAINT content_translations_lang_check CHECK (lang IN ('fr','de','it','es'));

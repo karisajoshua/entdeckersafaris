@@ -8,7 +8,7 @@ const Item = z.object({
 });
 
 const Input = z.object({
-  lang: z.enum(["fr", "de", "it"]),
+  lang: z.enum(["fr", "de", "it", "es"]),
   items: z.array(Item).max(80),
 });
 
@@ -19,6 +19,7 @@ const LANG_NAMES: Record<string, string> = {
   fr: "French",
   de: "German",
   it: "Italian",
+  es: "Spanish",
 };
 
 function hash(value: string): string {
