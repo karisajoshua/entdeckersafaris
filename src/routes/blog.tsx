@@ -4,6 +4,8 @@ import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 import { Reveal } from "../components/reveal";
 import { postsQuery } from "../lib/queries";
+import { useT } from "../lib/i18n";
+import { useTranslatedPosts } from "../lib/use-translated-content";
 
 export const Route = createFileRoute("/blog")({
   loader: ({ context }) => context.queryClient.ensureQueryData(postsQuery),
@@ -44,7 +46,9 @@ function BlogMessage({ title }: { title: string }) {
 }
 
 function BlogIndex() {
-  const { data: posts } = useSuspenseQuery(postsQuery);
+  const t = useT();
+  const { data: rawPosts } = useSuspenseQuery(postsQuery);
+  const posts = useTranslatedPosts(rawPosts);
   const [featured, ...rest] = posts;
 
   return (
@@ -53,13 +57,14 @@ function BlogIndex() {
 
       <header className="mx-auto mt-24 w-full max-w-(--container-max) px-gutter pb-12 pt-section-mobile md:pt-section-desktop">
         <div className="max-w-3xl">
-          <span className="label text-savannah-gold">Journal</span>
+          <span className="label text-savannah-gold">{t("Journal")}</span>
           <h1 className="mb-6 mt-4 text-headline-md text-deep-forest md:text-headline-lg">
-            Notes From The Field
+            {t("Notes From The Field")}
           </h1>
           <p className="text-body-lg text-on-surface-variant">
-            Migration timings, city safaris and hard-won packing wisdom — written by the guides who
-            drive these routes every week.
+            {t(
+              "Migration timings, city safaris and hard-won packing wisdom — written by the guides who drive these routes every week.",
+            )}
           </p>
         </div>
       </header>
@@ -67,7 +72,7 @@ function BlogIndex() {
       <main className="mx-auto w-full max-w-(--container-max) grow px-gutter pb-section-desktop">
         {posts.length === 0 && (
           <p className="text-body-md text-on-surface-variant">
-            New stories are on the way — check back soon.
+            {t("New stories are on the way — check back soon.")}
           </p>
         )}
 

@@ -6,6 +6,8 @@ import { SiteFooter } from "../components/site-footer";
 import { Reveal } from "../components/reveal";
 import { Lightbox } from "../components/lightbox";
 import { galleryQuery } from "../lib/queries";
+import { useT } from "../lib/i18n";
+import { useTranslatedGallery } from "../lib/use-translated-content";
 
 export const Route = createFileRoute("/gallery")({
   loader: ({ context }) => context.queryClient.ensureQueryData(galleryQuery),
@@ -46,7 +48,9 @@ function GalleryMessage({ title }: { title: string }) {
 }
 
 function GalleryPage() {
-  const { data: locations } = useSuspenseQuery(galleryQuery);
+  const t = useT();
+  const { data: rawLocations } = useSuspenseQuery(galleryQuery);
+  const locations = useTranslatedGallery(rawLocations);
   const [filter, setFilter] = useState<string>("all");
   const [open, setOpen] = useState<{ location: string; index: number } | null>(null);
 
@@ -62,19 +66,20 @@ function GalleryPage() {
 
       <header className="mx-auto mt-24 w-full max-w-(--container-max) px-gutter pb-10 pt-section-mobile md:pt-section-desktop">
         <div className="max-w-3xl">
-          <span className="label text-savannah-gold">Gallery</span>
+          <span className="label text-savannah-gold">{t("Gallery")}</span>
           <h1 className="mb-6 mt-4 text-headline-md text-deep-forest md:text-headline-lg">
-            Moments From The Wild
+            {t("Moments From The Wild")}
           </h1>
           <p className="text-body-lg text-on-surface-variant">
-            Scenes captured on safari with our guides, sorted by location. Click any photograph to
-            view it full size.
+            {t(
+              "Scenes captured on safari with our guides, sorted by location. Click any photograph to view it full size.",
+            )}
           </p>
         </div>
 
         {locations.length > 1 && (
           <div className="mt-10 flex flex-wrap gap-3">
-            {[{ slug: "all", name: "All locations" }, ...locations].map((option) => (
+            {[{ slug: "all", name: t("All locations") }, ...locations].map((option) => (
               <button
                 key={option.slug}
                 type="button"

@@ -6,6 +6,8 @@ import { toursQuery } from "../lib/queries";
 import heroImg from "../assets/hero-savannah.jpg";
 import featureImg from "../assets/feature-nairobi-park.jpg";
 import { Reveal } from "../components/reveal";
+import { useT } from "../lib/i18n";
+import { useTranslatedTours } from "../lib/use-translated-content";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -35,7 +37,9 @@ const stats = [
 ];
 
 function Index() {
-  const { data: tours } = useSuspenseQuery(toursQuery);
+  const t = useT();
+  const { data: rawTours } = useSuspenseQuery(toursQuery);
+  const tours = useTranslatedTours(rawTours);
   const featured = tours.filter((t) =>
     ["nairobi-city-tour", "8-days-kenya-experience"].includes(t.slug),
   );
@@ -54,16 +58,16 @@ function Index() {
           <div className="hero-overlay absolute inset-0" />
           <div className="relative z-10 mx-auto flex max-w-[800px] flex-col items-center px-gutter text-center">
             <h1 className="mb-6 text-headline-lg text-horizon-sand md:text-display-xl">
-              Explore. Discover. Connect.
+              {t("Explore. Discover. Connect.")}
             </h1>
             <p className="mb-10 max-w-[600px] text-body-lg text-horizon-sand/90">
-              Experience the unique beauty of Kenya with personalized luxury safaris.
+              {t("Experience the unique beauty of Kenya with personalized luxury safaris.")}
             </p>
             <Link
               to="/tour-packages"
               className="label rounded-sm bg-deep-forest px-8 py-4 text-horizon-sand shadow-editorial transition-all duration-300 hover:-translate-y-1 hover:opacity-90"
             >
-              Start Your Journey
+              {t("Start Your Journey")}
             </Link>
           </div>
         </section>
@@ -73,19 +77,18 @@ function Index() {
           <div className="grid grid-cols-1 items-center gap-16 md:grid-cols-2">
             <Reveal>
               <h2 className="mb-6 text-headline-md text-deep-forest md:text-headline-lg">
-                The Entdecker Experience
+                {t("The Entdecker Experience")}
               </h2>
               <p className="mb-6 text-body-md text-on-surface-variant">
-                Discover Nairobi, the 'place of cool waters'. We offer a unique blend where the
-                vibrant energy of a modern metropolis seamlessly meets the raw, untamed beauty of
-                the African wild. Our curated experiences are designed for those who seek both
-                comfort and genuine adventure.
+                {t(
+                  "Discover Nairobi, the 'place of cool waters'. We offer a unique blend where the vibrant energy of a modern metropolis seamlessly meets the raw, untamed beauty of the African wild. Our curated experiences are designed for those who seek both comfort and genuine adventure.",
+                )}
               </p>
               <Link
                 to="/about"
                 className="label inline-flex items-center gap-2 text-savannah-gold transition-opacity hover:opacity-80"
               >
-                Read Our Story
+                {t("Read Our Story")}
                 <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
               </Link>
             </Reveal>
@@ -107,13 +110,13 @@ function Index() {
           <div className="mx-auto max-w-(--container-max)">
             <div className="mb-12 flex items-end justify-between">
               <h2 className="text-headline-md text-deep-forest md:text-headline-lg">
-                Featured Safaris
+                {t("Featured Safaris")}
               </h2>
               <Link
                 to="/tour-packages"
                 className="label hidden items-center gap-2 text-deep-forest transition-colors hover:text-savannah-gold md:inline-flex"
               >
-                View All Tours
+                {t("View All Tours")}
                 <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
               </Link>
             </div>
@@ -148,7 +151,7 @@ function Index() {
                       params={{ slug: tour.slug }}
                       className="label block w-full rounded-sm border border-savannah-gold py-3 text-center text-savannah-gold transition-colors duration-300 hover:bg-savannah-gold hover:text-surface"
                     >
-                      Explore Details
+                      {t("Explore Details")}
                     </Link>
                   </div>
                 </Reveal>
@@ -160,7 +163,7 @@ function Index() {
         {/* Standard */}
         <section className="mx-auto max-w-(--container-max) border-t border-deep-forest/10 px-gutter py-section-mobile md:py-section-desktop">
           <h2 className="mb-6 text-center text-headline-md text-deep-forest">
-            The Entdecker Standard
+            {t("The Entdecker Standard")}
           </h2>
           <div className="gold-rule mb-14" aria-hidden="true">
             <span />
@@ -173,7 +176,7 @@ function Index() {
                   {stat.icon}
                 </span>
                 <h4 className="mb-2 text-headline-md text-deep-forest">{stat.value}</h4>
-                <p className="label text-on-surface-variant">{stat.label}</p>
+                <p className="label text-on-surface-variant">{t(stat.label)}</p>
               </Reveal>
             ))}
           </div>
@@ -186,12 +189,12 @@ function Index() {
               format_quote
             </span>
             <p className="text-headline-md leading-relaxed text-horizon-sand/90">
-              "As travel consultants, we are here to help you create a memorable trip. Our passion
-              for Kenya's landscapes and deep respect for its heritage ensures every safari is a
-              masterpiece of discovery."
+              {t(
+                '"As travel consultants, we are here to help you create a memorable trip. Our passion for Kenya\'s landscapes and deep respect for its heritage ensures every safari is a masterpiece of discovery."',
+              )}
             </p>
             <div className="mt-8">
-              <p className="label text-savannah-gold">The Entdecker Team</p>
+              <p className="label text-savannah-gold">{t("The Entdecker Team")}</p>
             </div>
           </div>
         </section>

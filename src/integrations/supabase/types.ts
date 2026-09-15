@@ -92,6 +92,39 @@ export type Database = {
         }
         Relationships: []
       }
+      content_translations: {
+        Row: {
+          created_at: string
+          entity: string
+          entity_id: string
+          fields: Json
+          id: string
+          lang: string
+          source_hash: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          entity: string
+          entity_id: string
+          fields?: Json
+          id?: string
+          lang: string
+          source_hash: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          entity?: string
+          entity_id?: string
+          fields?: Json
+          id?: string
+          lang?: string
+          source_hash?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       gallery_locations: {
         Row: {
           blurb: string

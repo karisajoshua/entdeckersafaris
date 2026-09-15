@@ -1,7 +1,10 @@
 import { Link } from "@tanstack/react-router";
+import { useT } from "@/lib/i18n";
 import logo from "../assets/entdecker-badge.png.asset.json";
 
 export function SiteFooter() {
+  const t = useT();
+
   return (
     <footer className="w-full bg-deep-forest text-horizon-sand">
       <div className="mx-auto grid max-w-(--container-max) grid-cols-1 gap-8 px-gutter py-section-mobile md:grid-cols-4 md:py-section-desktop">
@@ -22,15 +25,16 @@ export function SiteFooter() {
           </Link>
 
           <p className="max-w-[400px] text-body-md text-surface-variant/70">
-            Crafting luxurious, organic, and highly personalized safari experiences across Kenya's
-            most breathtaking landscapes.
+            {t(
+              "Crafting luxurious, organic, and highly personalized safari experiences across Kenya's most breathtaking landscapes.",
+            )}
           </p>
         </div>
 
         <div>
-          <h4 className="label mb-6 text-savannah-gold">Contact</h4>
+          <h4 className="label mb-6 text-savannah-gold">{t("Contact")}</h4>
           <ul className="space-y-4 text-body-md">
-            <li className="text-surface-variant/70">Nairobi, Kenya</li>
+            <li className="text-surface-variant/70">{t("Nairobi, Kenya")}</li>
             <li>
               <a
                 href="tel:+254721886882"
@@ -59,14 +63,14 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <h4 className="label mb-6 text-savannah-gold">Explore</h4>
+          <h4 className="label mb-6 text-savannah-gold">{t("Explore")}</h4>
           <ul className="space-y-4 text-body-md">
             <li>
               <Link
                 to="/tour-packages"
                 className="text-surface-variant/70 transition-colors duration-200 hover:text-savannah-gold"
               >
-                Tour Packages
+                {t("Tour Packages")}
               </Link>
             </li>
             <li>
@@ -74,7 +78,7 @@ export function SiteFooter() {
                 to="/gallery"
                 className="text-surface-variant/70 transition-colors duration-200 hover:text-savannah-gold"
               >
-                Gallery
+                {t("Gallery")}
               </Link>
             </li>
             <li>
@@ -82,7 +86,7 @@ export function SiteFooter() {
                 to="/blog"
                 className="text-surface-variant/70 transition-colors duration-200 hover:text-savannah-gold"
               >
-                Blog
+                {t("Blog")}
               </Link>
             </li>
             <li>
@@ -90,7 +94,7 @@ export function SiteFooter() {
                 to="/about"
                 className="text-surface-variant/70 transition-colors duration-200 hover:text-savannah-gold"
               >
-                About Us
+                {t("About Us")}
               </Link>
             </li>
           </ul>
@@ -100,24 +104,24 @@ export function SiteFooter() {
 
       <div className="mx-auto max-w-(--container-max) border-t border-surface-variant/10 px-gutter pb-8 pt-8 text-center">
         <p className="label text-surface-variant/50">
-          © 2026 Entdecker Safaris. All rights reserved.
+          {t("© 2026 Entdecker Safaris. All rights reserved.")}
         </p>
         <p className="label mt-3 flex flex-wrap items-center justify-center gap-4 text-surface-variant/50">
           <Link
             to="/privacy"
             className="transition-colors duration-200 hover:text-savannah-gold"
           >
-            Privacy Policy
+            {t("Privacy Policy")}
           </Link>
           <Link
             to="/terms"
             className="transition-colors duration-200 hover:text-savannah-gold"
           >
-            Terms of Service
+            {t("Terms of Service")}
           </Link>
         </p>
         <p className="label mt-2 text-surface-variant/40">
-          Powered by Texcortech Systems
+          {t("Powered by Texcortech Systems")}
         </p>
       </div>
     </footer>

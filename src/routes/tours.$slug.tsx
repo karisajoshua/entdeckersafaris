@@ -2,6 +2,8 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 import { Reveal } from "../components/reveal";
+import { useT } from "../lib/i18n";
+import { useTranslatedTour } from "../lib/use-translated-content";
 import { tourQuery } from "../lib/queries";
 import { whatsappLink } from "../components/whatsapp-button";
 
@@ -57,7 +59,9 @@ function TourNotFound() {
 }
 
 function TourDetail() {
-  const { tour } = Route.useLoaderData();
+  const t = useT();
+  const { tour: rawTour } = Route.useLoaderData();
+  const tour = useTranslatedTour(rawTour) ?? rawTour;
 
   return (
     <div className="flex min-h-screen flex-col bg-surface">
@@ -96,7 +100,7 @@ function TourDetail() {
           <div className="mx-auto max-w-(--container-max)">
             <Reveal>
               <h2 className="mb-12 text-headline-md text-deep-forest md:text-headline-lg">
-                The Itinerary
+                {t("The Itinerary")}
               </h2>
             </Reveal>
 
@@ -118,11 +122,12 @@ function TourDetail() {
         <section className="mx-auto max-w-(--container-max) px-gutter py-section-mobile text-center md:py-section-desktop">
           <Reveal>
             <h2 className="mb-6 text-headline-md text-deep-forest">
-              Ready to tailor this itinerary?
+              {t("Ready to tailor this itinerary?")}
             </h2>
             <p className="mx-auto mb-8 max-w-xl text-body-md text-on-surface-variant">
-              Every journey is flexible — tell us your dates, budget and interests and we will adapt
-              it to you.
+              {t(
+                "Every journey is flexible — tell us your dates, budget and interests and we will adapt it to you.",
+              )}
             </p>
             <a
               href={whatsappLink(
@@ -134,7 +139,7 @@ function TourDetail() {
               rel="noopener noreferrer"
               className="label inline-block rounded-sm bg-deep-forest px-8 py-4 text-horizon-sand shadow-editorial transition-all hover:-translate-y-1"
             >
-              Enquire About This Safari
+              {t("Enquire About This Safari")}
             </a>
           </Reveal>
         </section>

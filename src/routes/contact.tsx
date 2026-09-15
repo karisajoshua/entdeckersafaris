@@ -5,6 +5,7 @@ import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 import { submitEnquiry } from "../lib/content.functions";
 import duskImg from "../assets/contact-dusk.jpg";
+import { useT } from "../lib/i18n";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -29,6 +30,7 @@ const fieldClass =
   "w-full border-0 border-b border-deep-forest/20 bg-transparent px-0 py-2 text-body-md text-deep-forest outline-none transition-colors placeholder:text-surface-dim focus:border-deep-forest";
 
 function Contact() {
+  const t = useT();
   const send = useServerFn(submitEnquiry);
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
@@ -77,14 +79,14 @@ function Contact() {
           <div className="grid grid-cols-1 items-start gap-16 md:grid-cols-2 md:gap-section-desktop">
             <div className="space-y-12">
               <h1 className="text-headline-lg tracking-tight text-deep-forest md:text-display-xl">
-                Would like to talk?
+                {t("Would like to talk?")}
               </h1>
               <div className="space-y-4">
-                <h2 className="label text-savannah-gold">Contact Details</h2>
+                <h2 className="label text-savannah-gold">{t("Contact Details")}</h2>
                 <p className="max-w-md text-body-lg text-on-surface-variant">
-                  If you have a story to share or a question that has not been answered on our
-                  website, please get in touch with us via the contact details listed below or fill
-                  in the form on the right.
+                  {t(
+                    "If you have a story to share or a question that has not been answered on our website, please get in touch with us via the contact details listed below or fill in the form on the right.",
+                  )}
                 </p>
               </div>
 
@@ -94,14 +96,14 @@ function Contact() {
                     location_on
                   </span>
                   <div>
-                    <h3 className="label mb-1 text-on-surface-variant">Office</h3>
-                    <p className="text-body-md text-deep-forest">Nairobi, Kenya</p>
+                    <h3 className="label mb-1 text-on-surface-variant">{t("Office")}</h3>
+                    <p className="text-body-md text-deep-forest">{t("Nairobi, Kenya")}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <span className="material-symbols-outlined mt-1 text-savannah-gold">call</span>
                   <div>
-                    <h3 className="label mb-1 text-on-surface-variant">Phone</h3>
+                    <h3 className="label mb-1 text-on-surface-variant">{t("Phone")}</h3>
                     <a
                       href="tel:+254721886882"
                       className="block text-body-md text-deep-forest transition-colors hover:text-savannah-gold"
@@ -119,7 +121,7 @@ function Contact() {
                 <div className="flex items-start gap-4">
                   <span className="material-symbols-outlined mt-1 text-savannah-gold">mail</span>
                   <div>
-                    <h3 className="label mb-1 text-on-surface-variant">Email</h3>
+                    <h3 className="label mb-1 text-on-surface-variant">{t("Email")}</h3>
                     <a
                       href="mailto:info@entdeckersafaris.com"
                       className="text-body-md text-deep-forest transition-colors hover:text-savannah-gold"
@@ -131,7 +133,7 @@ function Contact() {
                 <div className="flex items-start gap-4">
                   <span className="material-symbols-outlined mt-1 text-savannah-gold">language</span>
                   <div>
-                    <h3 className="label mb-1 text-on-surface-variant">Website</h3>
+                    <h3 className="label mb-1 text-on-surface-variant">{t("Website")}</h3>
                     <a
                       href="https://entdeckersafaris.com"
                       className="text-body-md text-deep-forest transition-colors hover:text-savannah-gold"
@@ -147,52 +149,52 @@ function Contact() {
               <form className="space-y-8" onSubmit={onSubmit}>
                 <div>
                   <label className="label mb-2 block text-on-surface-variant" htmlFor="name">
-                    Name
+                    {t("Name")}
                   </label>
                   <input
                     id="name"
                     name="name"
                     type="text"
                     required
-                    placeholder="Your full name"
+                    placeholder={t("Your full name")}
                     className={fieldClass}
                   />
                 </div>
                 <div>
                   <label className="label mb-2 block text-on-surface-variant" htmlFor="email">
-                    Email
+                    {t("Email")}
                   </label>
                   <input
                     id="email"
                     name="email"
                     type="email"
                     required
-                    placeholder="Your email address"
+                    placeholder={t("Your email address")}
                     className={fieldClass}
                   />
                 </div>
                 <div>
                   <label className="label mb-2 block text-on-surface-variant" htmlFor="phone">
-                    Phone (optional)
+                    {t("Phone (optional)")}
                   </label>
                   <input
                     id="phone"
                     name="phone"
                     type="tel"
-                    placeholder="Your phone number"
+                    placeholder={t("Your phone number")}
                     className={fieldClass}
                   />
                 </div>
                 <div>
                   <label className="label mb-2 block text-on-surface-variant" htmlFor="message">
-                    Message
+                    {t("Message")}
                   </label>
                   <textarea
                     id="message"
                     name="message"
                     rows={4}
                     required
-                    placeholder="Tell us about your dream safari..."
+                    placeholder={t("Tell us about your dream safari...")}
                     className={`${fieldClass} resize-none`}
                   />
                 </div>
@@ -201,11 +203,11 @@ function Contact() {
                   disabled={sending}
                   className="label w-full rounded-sm bg-deep-forest px-8 py-4 text-horizon-sand shadow-editorial transition-all hover:opacity-90 hover:shadow-editorial-lg disabled:opacity-60 md:w-auto"
                 >
-                  {sending ? "Sending…" : "Send Message"}
+                  {sending ? `${t("Sending")}…` : t("Send Message")}
                 </button>
                 {sent && (
                   <p className="text-body-md text-savannah-gold">
-                    Thank you — we'll be in touch shortly.
+                    {t("Thank you — we'll be in touch shortly.")}
                   </p>
                 )}
                 {error && <p className="text-body-md text-red-700">{error}</p>}

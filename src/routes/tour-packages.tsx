@@ -4,6 +4,8 @@ import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 import { Reveal } from "../components/reveal";
 import { toursQuery } from "../lib/queries";
+import { useT } from "../lib/i18n";
+import { useTranslatedTours } from "../lib/use-translated-content";
 
 export const Route = createFileRoute("/tour-packages")({
   loader: ({ context }) => context.queryClient.ensureQueryData(toursQuery),
@@ -50,7 +52,9 @@ function ToursMessage({ title }: { title: string }) {
 }
 
 function TourPackages() {
-  const { data: tours } = useSuspenseQuery(toursQuery);
+  const t = useT();
+  const { data: rawTours } = useSuspenseQuery(toursQuery);
+  const tours = useTranslatedTours(rawTours);
 
   const categories = [
     ...CATEGORY_ORDER.filter((name) => tours.some((tour) => tour.category === name)),
@@ -66,12 +70,12 @@ function TourPackages() {
       <header className="mx-auto mt-20 w-full max-w-(--container-max) px-gutter pb-section-mobile pt-section-mobile md:pb-section-desktop md:pt-section-desktop">
         <div className="max-w-3xl">
           <h1 className="mb-6 text-headline-md text-deep-forest md:text-headline-lg">
-            Curated Journeys
+            {t("Curated Journeys")}
           </h1>
           <p className="text-body-lg text-on-surface-variant">
-            Discover the untamed beauty of Africa through our meticulously crafted itineraries. From
-            the bustling streets of Nairobi to the vast plains of the Masai Mara, every journey is an
-            invitation to explore.
+            {t(
+              "Discover the untamed beauty of Africa through our meticulously crafted itineraries. From the bustling streets of Nairobi to the vast plains of the Masai Mara, every journey is an invitation to explore.",
+            )}
           </p>
         </div>
       </header>
@@ -80,7 +84,7 @@ function TourPackages() {
         {categories.map((category) => (
           <section key={category} className="mb-20 last:mb-0">
             <Reveal>
-              <h2 className="mb-10 text-headline-md text-deep-forest">{category}</h2>
+              <h2 className="mb-10 text-headline-md text-deep-forest">{t(category)}</h2>
             </Reveal>
             <div className="grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
               {tours
@@ -113,7 +117,7 @@ function TourPackages() {
                         params={{ slug: tour.slug }}
                         className="label mt-auto inline-flex w-fit items-center space-x-2 border-b border-transparent pb-1 text-savannah-gold transition-colors hover:border-deep-forest hover:text-deep-forest"
                       >
-                        <span>View Itinerary</span>
+                        <span>{t("View Itinerary")}</span>
                         <span className="material-symbols-outlined text-[18px]">
                           arrow_right_alt
                         </span>

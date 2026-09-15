@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/use-session";
+import { useI18n, LANGS, LANG_LABELS } from "@/lib/i18n";
 import logo from "../assets/entdecker-badge.png.asset.json";
 
 const links = [
@@ -18,6 +19,7 @@ const links = [
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const { user, loading } = useSession();
+  const { t, lang, setLang } = useI18n();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -55,12 +57,30 @@ export function SiteHeader() {
                 className: "label pb-1 text-savannah-gold border-b border-savannah-gold",
               }}
             >
-              {link.label}
+              {t(link.label)}
             </Link>
           ))}
         </nav>
 
         <div className="hidden items-center gap-5 lg:flex">
+          <div className="flex items-center gap-1" role="group" aria-label="Language">
+            {LANGS.map((code) => (
+              <button
+                key={code}
+                type="button"
+                onClick={() => setLang(code)}
+                aria-pressed={lang === code}
+                className={`label rounded-sm px-2 py-1 transition-colors duration-200 ${
+                  lang === code
+                    ? "bg-deep-forest text-horizon-sand"
+                    : "text-on-surface-variant hover:text-savannah-gold"
+                }`}
+              >
+                {LANG_LABELS[code]}
+              </button>
+            ))}
+          </div>
+
           {!loading &&
             (user ? (
               <>
@@ -68,14 +88,14 @@ export function SiteHeader() {
                   to="/admin"
                   className="label text-on-surface-variant transition-colors duration-300 hover:text-savannah-gold"
                 >
-                  Admin
+                  {t("Admin")}
                 </Link>
                 <button
                   type="button"
                   onClick={() => void handleSignOut()}
                   className="label text-on-surface-variant transition-colors duration-300 hover:text-savannah-gold"
                 >
-                  Sign Out
+                  {t("Sign Out")}
                 </button>
               </>
             ) : (
@@ -83,7 +103,7 @@ export function SiteHeader() {
                 to="/auth"
                 className="label text-on-surface-variant transition-colors duration-300 hover:text-savannah-gold"
               >
-                Sign In
+                {t("Sign In")}
               </Link>
             ))}
 
@@ -91,7 +111,7 @@ export function SiteHeader() {
             to="/contact"
             className="rounded-sm bg-deep-forest px-6 py-3 text-horizon-sand shadow-editorial transition-opacity duration-300 hover:opacity-90 label"
           >
-            Book Now
+            {t("Book Now")}
           </Link>
         </div>
 
@@ -117,9 +137,27 @@ export function SiteHeader() {
               activeOptions={{ exact: link.to === "/" }}
               activeProps={{ className: "label py-3 text-savannah-gold" }}
             >
-              {link.label}
+              {t(link.label)}
             </Link>
           ))}
+
+          <div className="mt-2 flex gap-2 border-t border-deep-forest/10 pt-4" role="group" aria-label="Language">
+            {LANGS.map((code) => (
+              <button
+                key={code}
+                type="button"
+                onClick={() => setLang(code)}
+                aria-pressed={lang === code}
+                className={`label rounded-sm border px-3 py-2 transition-colors duration-200 ${
+                  lang === code
+                    ? "border-deep-forest bg-deep-forest text-horizon-sand"
+                    : "border-deep-forest/20 text-on-surface-variant"
+                }`}
+              >
+                {LANG_LABELS[code]}
+              </button>
+            ))}
+          </div>
 
           {!loading && (
             <div className="mt-2 flex flex-col gap-1 border-t border-deep-forest/10 pt-2">
@@ -130,14 +168,14 @@ export function SiteHeader() {
                     onClick={() => setOpen(false)}
                     className="label py-3 text-savannah-gold"
                   >
-                    Admin
+                    {t("Admin")}
                   </Link>
                   <button
                     type="button"
                     onClick={() => void handleSignOut()}
                     className="label py-3 text-left text-on-surface-variant"
                   >
-                    Sign Out
+                    {t("Sign Out")}
                   </button>
                 </>
               ) : (
@@ -146,7 +184,7 @@ export function SiteHeader() {
                   onClick={() => setOpen(false)}
                   className="label py-3 text-savannah-gold"
                 >
-                  Sign In
+                  {t("Sign In")}
                 </Link>
               )}
             </div>
