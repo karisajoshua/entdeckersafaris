@@ -3,6 +3,7 @@ import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 import { Reveal } from "../components/reveal";
 import featureImg from "../assets/feature-nairobi-park.jpg";
+import { useT } from "../lib/i18n";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -40,6 +41,8 @@ const reasons = [
 ];
 
 function About() {
+  const t = useT();
+
   return (
     <div className="flex min-h-screen flex-col bg-surface">
       <SiteHeader />
@@ -47,19 +50,19 @@ function About() {
       <main className="grow pt-20">
         <section className="mx-auto max-w-(--container-max) px-gutter py-section-mobile md:py-section-desktop">
           <div className="max-w-3xl">
-            <p className="label mb-4 text-savannah-gold">About Us</p>
+            <p className="label mb-4 text-savannah-gold">{t("About Us")}</p>
             <h1 className="mb-6 text-headline-md text-deep-forest md:text-headline-lg">
-              Welcome to Entdecker Safaris
+              {t("Welcome to Entdecker Safaris")}
             </h1>
             <p className="mb-6 text-body-lg text-on-surface-variant">
-              As travel consultants, we are here to help you create a memorable trip that meets your
-              specific interests and needs, and to discover new adventures. From the start, we will
-              create a specialized, customized safari according to your specification and advise you
-              on making the best choices.
+              {t(
+                "As travel consultants, we are here to help you create a memorable trip that meets your specific interests and needs, and to discover new adventures. From the start, we will create a specialized, customized safari according to your specification and advise you on making the best choices.",
+              )}
             </p>
             <p className="text-body-md text-on-surface-variant">
-              We will look after all the details to make your journey effortless and seamless so you
-              can relax and thoroughly enjoy your holiday. Welcome, and feel free to book with us!
+              {t(
+                "We will look after all the details to make your journey effortless and seamless so you can relax and thoroughly enjoy your holiday. Welcome, and feel free to book with us!",
+              )}
             </p>
           </div>
         </section>
@@ -78,7 +81,7 @@ function About() {
         <section className="mx-auto max-w-(--container-max) px-gutter py-section-mobile md:py-section-desktop">
           <Reveal>
             <h2 className="mb-12 text-headline-md text-deep-forest md:text-headline-lg">
-              What We Do
+              {t("What We Do")}
             </h2>
           </Reveal>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -91,7 +94,7 @@ function About() {
                 <span className="material-symbols-outlined mb-6 block text-[32px] text-savannah-gold">
                   {service.icon}
                 </span>
-                <h3 className="text-headline-md text-deep-forest">{service.label}</h3>
+                <h3 className="text-headline-md text-deep-forest">{t(service.label)}</h3>
               </Reveal>
             ))}
           </div>
@@ -101,7 +104,7 @@ function About() {
           <div className="mx-auto max-w-(--container-max)">
             <Reveal>
               <h2 className="mb-6 text-center text-headline-md text-deep-forest">
-                Why Entdecker Safaris
+                {t("Why Entdecker Safaris")}
               </h2>
               <div className="gold-rule mb-12" aria-hidden="true">
                 <span />
@@ -114,7 +117,7 @@ function About() {
                   <p className="mb-2 font-display text-headline-lg text-savannah-gold">
                     {reason.value}
                   </p>
-                  <p className="label text-on-surface-variant">{reason.label}</p>
+                  <p className="label text-on-surface-variant">{t(reason.label)}</p>
                 </Reveal>
               ))}
             </div>
@@ -127,21 +130,21 @@ function About() {
               format_quote
             </span>
             <p className="text-headline-md leading-relaxed text-horizon-sand/90">
-              "As travel consultants, we are here to help you create a memorable trip. Our passion
-              for Kenya's landscapes and deep respect for its heritage ensures every safari is a
-              masterpiece of discovery."
+              {t(
+                '"As travel consultants, we are here to help you create a memorable trip. Our passion for Kenya\'s landscapes and deep respect for its heritage ensures every safari is a masterpiece of discovery."',
+              )}
             </p>
-            <p className="label mt-8 text-savannah-gold">The Entdecker Team</p>
+            <p className="label mt-8 text-savannah-gold">{t("The Entdecker Team")}</p>
           </div>
         </section>
 
         <section className="mx-auto max-w-(--container-max) px-gutter py-section-mobile text-center md:py-section-desktop">
-          <h2 className="mb-6 text-headline-md text-deep-forest">Ready to explore?</h2>
+          <h2 className="mb-6 text-headline-md text-deep-forest">{t("Ready to explore?")}</h2>
           <Link
             to="/tour-packages"
             className="label inline-block rounded-sm bg-deep-forest px-8 py-4 text-horizon-sand shadow-editorial transition-all hover:-translate-y-1"
           >
-            View Tour Packages
+            {t("View Tour Packages")}
           </Link>
         </section>
       </main>
