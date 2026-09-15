@@ -29,7 +29,7 @@ function useTranslations(
     enabled: lang !== "en" && items.length > 0,
     staleTime: 60 * 60 * 1000,
     queryFn: () =>
-      translate({ data: { lang: lang as "fr" | "de" | "it", items } }) as Promise<TranslationMap>,
+      translate({ data: { lang: lang as "fr" | "de" | "it" | "es", items } }) as Promise<TranslationMap>,
   });
 
   return lang === "en" ? {} : (query.data ?? {});
