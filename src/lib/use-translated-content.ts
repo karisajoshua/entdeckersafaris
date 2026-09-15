@@ -32,7 +32,6 @@ function useTranslations(
       translate({ data: { lang: lang as "fr" | "de" | "it", items } }) as Promise<TranslationMap>,
   });
 
-  if (typeof window !== "undefined") console.log("i18n query", lang, items.length, query.status, query.fetchStatus, query.error);
   return lang === "en" ? {} : (query.data ?? {});
 }
 
