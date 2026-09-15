@@ -10,8 +10,9 @@ import {
 import { fr } from "../locales/fr";
 import { de } from "../locales/de";
 import { it } from "../locales/it";
+import { es } from "../locales/es";
 
-export const LANGS = ["en", "fr", "de", "it"] as const;
+export const LANGS = ["en", "fr", "de", "it", "es"] as const;
 export type Lang = (typeof LANGS)[number];
 
 export const LANG_LABELS: Record<Lang, string> = {
@@ -19,9 +20,10 @@ export const LANG_LABELS: Record<Lang, string> = {
   fr: "FR",
   de: "DE",
   it: "IT",
+  es: "ES",
 };
 
-const DICTS: Record<Lang, Record<string, string>> = { en: {}, fr, de, it };
+const DICTS: Record<Lang, Record<string, string>> = { en: {}, fr, de, it, es };
 
 const STORAGE_KEY = "edsf.lang";
 
