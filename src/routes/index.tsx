@@ -8,6 +8,9 @@ import featureImg from "../assets/feature-nairobi-park.jpg";
 import { Reveal } from "../components/reveal";
 import { useT } from "../lib/i18n";
 import { useTranslatedTours } from "../lib/use-translated-content";
+import mara1 from "../assets/gallery/masai-mara-1.jpeg.asset.json";
+import mara7 from "../assets/gallery/masai-mara-7.jpeg.asset.json";
+import mara9 from "../assets/gallery/masai-mara-9.jpeg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -162,23 +165,48 @@ function Index() {
 
         {/* Standard */}
         <section className="mx-auto max-w-(--container-max) border-t border-deep-forest/10 px-gutter py-section-mobile md:py-section-desktop">
-          <h2 className="mb-6 text-center text-headline-md text-deep-forest">
-            {t("The Entdecker Standard")}
-          </h2>
-          <div className="gold-rule mb-14" aria-hidden="true">
-            <span />
-          </div>
+          <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+            <Reveal className="grid h-[420px] grid-cols-2 grid-rows-2 gap-3 md:h-[520px]">
+              <img
+                src={mara1.url}
+                alt="Maasai giraffe standing in golden savannah grass"
+                loading="lazy"
+                className="row-span-2 h-full w-full rounded-lg object-cover"
+              />
+              <img
+                src={mara7.url}
+                alt="Wildebeest descending a riverbank during the Great Migration"
+                loading="lazy"
+                className="h-full w-full rounded-lg object-cover"
+              />
+              <img
+                src={mara9.url}
+                alt="Wildebeest moving across the open Masai Mara plains"
+                loading="lazy"
+                className="h-full w-full rounded-lg object-cover"
+              />
+            </Reveal>
 
-          <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
-            {stats.map((stat, i) => (
-              <Reveal key={stat.label} delay={i * 80} className="flex flex-col items-center">
-                <span className="material-symbols-outlined mb-4 text-[48px] text-savannah-gold">
-                  {stat.icon}
-                </span>
-                <h4 className="mb-2 text-headline-md text-deep-forest">{stat.value}</h4>
-                <p className="label text-on-surface-variant">{t(stat.label)}</p>
-              </Reveal>
-            ))}
+            <div>
+              <h2 className="mb-6 text-center text-headline-md text-deep-forest lg:text-left">
+                {t("The Entdecker Standard")}
+              </h2>
+              <div className="gold-rule mb-12 lg:justify-start" aria-hidden="true">
+                <span />
+              </div>
+
+              <div className="grid grid-cols-2 gap-x-6 gap-y-10 text-center lg:text-left">
+                {stats.map((stat, i) => (
+                  <Reveal key={stat.label} delay={i * 80} className="flex flex-col items-center lg:items-start">
+                    <span className="material-symbols-outlined mb-4 text-[40px] text-savannah-gold">
+                      {stat.icon}
+                    </span>
+                    <h4 className="mb-2 text-headline-md text-deep-forest">{stat.value}</h4>
+                    <p className="label text-on-surface-variant">{t(stat.label)}</p>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 
