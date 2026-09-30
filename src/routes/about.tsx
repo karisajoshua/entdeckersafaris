@@ -4,6 +4,8 @@ import { SiteFooter } from "../components/site-footer";
 import { Reveal } from "../components/reveal";
 import featureImg from "../assets/feature-nairobi-park.jpg";
 import { useT } from "../lib/i18n";
+import mara2 from "../assets/gallery/masai-mara-2.jpeg.asset.json";
+import mara6 from "../assets/gallery/masai-mara-6.jpeg.asset.json";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -79,24 +81,37 @@ function About() {
         </section>
 
         <section className="mx-auto max-w-(--container-max) px-gutter py-section-mobile md:py-section-desktop">
-          <Reveal>
-            <h2 className="mb-12 text-headline-md text-deep-forest md:text-headline-lg">
-              {t("What We Do")}
-            </h2>
-          </Reveal>
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {services.map((service, i) => (
-              <Reveal
-                key={service.label}
-                delay={i * 80}
-                className="rounded-lg border border-deep-forest/10 bg-surface-container-lowest p-8 transition-shadow duration-300 hover:shadow-editorial"
-              >
-                <span className="material-symbols-outlined mb-6 block text-[32px] text-savannah-gold">
-                  {service.icon}
-                </span>
-                <h3 className="text-headline-md text-deep-forest">{t(service.label)}</h3>
+          <div className="grid items-stretch gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+            <Reveal className="relative min-h-[420px] overflow-hidden rounded-lg lg:min-h-full">
+              <img
+                src={mara6.url}
+                alt="Lioness walking through long grass toward an acacia thicket"
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            </Reveal>
+
+            <div>
+              <Reveal>
+                <h2 className="mb-12 text-headline-md text-deep-forest md:text-headline-lg">
+                  {t("What We Do")}
+                </h2>
               </Reveal>
-            ))}
+              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+                {services.map((service, i) => (
+                  <Reveal
+                    key={service.label}
+                    delay={i * 80}
+                    className="rounded-lg border border-deep-forest/10 bg-surface-container-lowest p-8 transition-shadow duration-300 hover:shadow-editorial"
+                  >
+                    <span className="material-symbols-outlined mb-6 block text-[32px] text-savannah-gold">
+                      {service.icon}
+                    </span>
+                    <h3 className="text-headline-md text-deep-forest">{t(service.label)}</h3>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 
@@ -124,8 +139,16 @@ function About() {
           </div>
         </section>
 
-        <section className="bg-deep-forest px-gutter py-section-mobile text-horizon-sand md:py-section-desktop">
-          <div className="mx-auto max-w-[800px] text-center">
+        <section className="relative overflow-hidden bg-deep-forest px-gutter py-section-mobile text-horizon-sand md:py-section-desktop">
+          <img
+            src={mara2.url}
+            alt=""
+            loading="lazy"
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover opacity-20"
+          />
+          <div className="absolute inset-0 bg-deep-forest/80" aria-hidden="true" />
+          <div className="relative mx-auto max-w-[800px] text-center">
             <span className="material-symbols-outlined mb-6 text-[32px] text-savannah-gold">
               format_quote
             </span>
