@@ -6,6 +6,9 @@ import { useT } from "../lib/i18n";
 import { useTranslatedTour } from "../lib/use-translated-content";
 import { tourQuery } from "../lib/queries";
 import { whatsappLink } from "../components/whatsapp-button";
+import mara1 from "../assets/gallery/masai-mara-1.jpeg.asset.json";
+import mara3 from "../assets/gallery/masai-mara-3.jpeg.asset.json";
+import mara8 from "../assets/gallery/masai-mara-8.jpeg.asset.json";
 
 export const Route = createFileRoute("/tours/$slug")({
   loader: async ({ context, params }) => {
@@ -62,6 +65,15 @@ function TourDetail() {
   const t = useT();
   const { tour: rawTour } = Route.useLoaderData();
   const tour = useTranslatedTour(rawTour) ?? rawTour;
+  const includesMasaiMara = [
+    tour.title,
+    tour.tagline,
+    ...tour.intro,
+    ...tour.itinerary.flatMap((step) => [step.heading, step.body]),
+  ]
+    .join(" ")
+    .toLowerCase()
+    .includes("mara");
 
   return (
     <div className="flex min-h-screen flex-col bg-surface">
@@ -95,6 +107,43 @@ function TourDetail() {
             ))}
           </div>
         </section>
+
+        {includesMasaiMara && (
+          <section className="mx-auto max-w-(--container-max) px-gutter pb-section-mobile md:pb-section-desktop">
+            <Reveal>
+              <span className="label text-savannah-gold">{t("Gallery")}</span>
+              <h2 className="mb-8 mt-3 text-headline-md text-deep-forest md:text-headline-lg">
+                {t("Moments From The Wild")}
+              </h2>
+            </Reveal>
+            <div className="grid h-[620px] grid-cols-2 grid-rows-2 gap-3 md:h-[520px] md:grid-cols-[1.1fr_0.9fr_0.9fr] md:grid-rows-1">
+              <Reveal className="col-span-2 overflow-hidden rounded-lg md:col-span-1">
+                <img
+                  src={mara8.url}
+                  alt="Wildebeest gathering during the Great Migration in the Masai Mara"
+                  loading="lazy"
+                  className="h-full w-full object-cover"
+                />
+              </Reveal>
+              <Reveal delay={80} className="overflow-hidden rounded-lg">
+                <img
+                  src={mara3.url}
+                  alt="Male lion calling across the Masai Mara grasslands"
+                  loading="lazy"
+                  className="h-full w-full object-cover"
+                />
+              </Reveal>
+              <Reveal delay={160} className="overflow-hidden rounded-lg">
+                <img
+                  src={mara1.url}
+                  alt="Maasai giraffe walking through golden savannah grass"
+                  loading="lazy"
+                  className="h-full w-full object-cover"
+                />
+              </Reveal>
+            </div>
+          </section>
+        )}
 
         <section className="bg-surface-container-low px-gutter py-section-mobile md:py-section-desktop">
           <div className="mx-auto max-w-(--container-max)">

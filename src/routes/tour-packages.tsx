@@ -6,6 +6,7 @@ import { Reveal } from "../components/reveal";
 import { toursQuery } from "../lib/queries";
 import { useT } from "../lib/i18n";
 import { useTranslatedTours } from "../lib/use-translated-content";
+import mara10 from "../assets/gallery/masai-mara-10.jpeg.asset.json";
 
 export const Route = createFileRoute("/tour-packages")({
   loader: ({ context }) => context.queryClient.ensureQueryData(toursQuery),
@@ -68,15 +69,26 @@ function TourPackages() {
       <SiteHeader />
 
       <header className="mx-auto mt-20 w-full max-w-(--container-max) px-gutter pb-section-mobile pt-section-mobile md:pb-section-desktop md:pt-section-desktop">
-        <div className="max-w-3xl">
-          <h1 className="mb-6 text-headline-md text-deep-forest md:text-headline-lg">
-            {t("Curated Journeys")}
-          </h1>
-          <p className="text-body-lg text-on-surface-variant">
-            {t(
-              "Discover the untamed beauty of Africa through our meticulously crafted itineraries. From the bustling streets of Nairobi to the vast plains of the Masai Mara, every journey is an invitation to explore.",
-            )}
-          </p>
+        <div className="grid items-end gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+          <div className="max-w-3xl">
+            <h1 className="mb-6 text-headline-md text-deep-forest md:text-headline-lg">
+              {t("Curated Journeys")}
+            </h1>
+            <p className="text-body-lg text-on-surface-variant">
+              {t(
+                "Discover the untamed beauty of Africa through our meticulously crafted itineraries. From the bustling streets of Nairobi to the vast plains of the Masai Mara, every journey is an invitation to explore.",
+              )}
+            </p>
+          </div>
+          <Reveal className="h-[280px] overflow-hidden rounded-lg border border-deep-forest/10 md:h-[360px]">
+            <img
+              src={mara10.url}
+              alt="Safari vehicles observing the Great Migration in the Masai Mara"
+              width={1200}
+              height={720}
+              className="h-full w-full object-cover"
+            />
+          </Reveal>
         </div>
       </header>
 

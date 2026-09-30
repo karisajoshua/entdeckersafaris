@@ -26,6 +26,8 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "Experience the unique beauty of Kenya with personalized luxury safaris.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(toursQuery),
