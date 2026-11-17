@@ -26,6 +26,7 @@ type TourForm = {
   title: string;
   tagline: string;
   duration: string;
+  priceUsd: number | null;
   image: string;
   alt: string;
   category: string;
@@ -47,6 +48,7 @@ const emptyTour: TourForm = {
   title: "",
   tagline: "",
   duration: "",
+  priceUsd: null,
   image: "",
   alt: "",
   category: "Safari Packages",
@@ -63,6 +65,7 @@ function toForm(tour: Tour): TourForm {
     title: tour.title,
     tagline: tour.tagline ?? "",
     duration: tour.duration ?? "",
+    priceUsd: tour.priceUsd ?? null,
     image: tour.image ?? "",
     alt: tour.alt ?? "",
     category: tour.category ?? "Safari Packages",
@@ -193,6 +196,22 @@ function AdminTours() {
                 value={form.duration}
                 placeholder="8 days"
                 onChange={(event) => setForm({ ...form, duration: event.target.value })}
+              />
+            </Field>
+            <Field label="Price per person (USD)">
+              <input
+                className={inputClass}
+                type="number"
+                min={0}
+                placeholder="Leave empty to hide the price"
+                value={form.priceUsd ?? ""}
+                onChange={(event) =>
+                  setForm({
+                    ...form,
+                    priceUsd:
+                      event.target.value === "" ? null : Math.max(0, Number(event.target.value) || 0),
+                  })
+                }
               />
             </Field>
             <Field label="Category">
@@ -380,8 +399,9 @@ function AdminTours() {
               <div>
                 <h2 className="text-headline-sm text-deep-forest">{tour.title}</h2>
                 <p className="label mt-1 text-savannah-gold">
-                  {tour.duration} · {tour.published ? "published" : "draft"} ·{" "}
-                  {tour.itinerary.length} steps
+                  {tour.duration}
+                  {tour.priceUsd != null && ` · $${tour.priceUsd.toLocaleString("en-US")} pp`} ·{" "}
+                  {tour.published ? "published" : "draft"} · {tour.itinerary.length} steps
                 </p>
                 {tour.tagline && (
                   <p className="mt-2 max-w-2xl text-body-md text-on-surface-variant">

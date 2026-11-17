@@ -1,0 +1,1 @@
+ALTER TABLE public.tours ADD COLUMN price_usd integer;

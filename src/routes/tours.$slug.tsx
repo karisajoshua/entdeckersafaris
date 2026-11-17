@@ -95,6 +95,11 @@ function TourDetail() {
             </span>
             <h1 className="text-headline-lg text-horizon-sand md:text-display-xl">{tour.title}</h1>
             <p className="mt-4 max-w-xl text-body-lg text-horizon-sand/90">{tour.tagline}</p>
+            {tour.priceUsd != null && (
+              <p className="label mt-4 w-fit rounded-sm border border-savannah-gold/60 px-3 py-1 text-savannah-gold">
+                {t("From")} ${tour.priceUsd.toLocaleString("en-US")} {t("per person")}
+              </p>
+            )}
           </div>
         </section>
 

@@ -40,6 +40,7 @@ export type Tour = {
   title: string;
   tagline: string;
   duration: string;
+  priceUsd: number | null;
   image: string;
   alt: string;
   category: string;

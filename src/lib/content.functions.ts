@@ -124,6 +124,7 @@ function mapTour(row: {
   title: string;
   tagline: string;
   duration: string;
+  price_usd: number | null;
   image_url: string;
   image_alt: string;
   category?: string | null;
@@ -138,6 +139,7 @@ function mapTour(row: {
     title: row.title,
     tagline: row.tagline,
     duration: row.duration,
+    priceUsd: row.price_usd ?? null,
     image: row.image_url,
     alt: row.image_alt,
     category: row.category ?? "Safari Packages",
@@ -149,7 +151,7 @@ function mapTour(row: {
 }
 
 const TOUR_COLUMNS =
-  "id, slug, title, tagline, duration, image_url, image_alt, category, intro, itinerary, published, sort_order";
+  "id, slug, title, tagline, duration, price_usd, image_url, image_alt, category, intro, itinerary, published, sort_order";
 
 export const listTours = createServerFn({ method: "GET" }).handler(async (): Promise<Tour[]> => {
   const { data, error } = await publicClient()

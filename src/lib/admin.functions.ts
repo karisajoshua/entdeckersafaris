@@ -243,7 +243,7 @@ export const deletePost = createServerFn({ method: "POST" })
 /* ----------------------------------- tours ---------------------------------- */
 
 const TOUR_COLUMNS =
-  "id, slug, title, tagline, duration, image_url, image_alt, category, intro, itinerary, published, sort_order";
+  "id, slug, title, tagline, duration, price_usd, image_url, image_alt, category, intro, itinerary, published, sort_order";
 
 function mapTour(row: any): Tour {
   return {
@@ -252,6 +252,7 @@ function mapTour(row: any): Tour {
     title: row.title,
     tagline: row.tagline,
     duration: row.duration,
+    priceUsd: row.price_usd ?? null,
     image: row.image_url,
     alt: row.image_alt,
     category: row.category ?? "Safari Packages",
@@ -282,6 +283,7 @@ const tourSchema = z.object({
   title: z.string().trim().min(1).max(200),
   tagline: z.string().trim().max(400).default(""),
   duration: z.string().trim().max(60).default(""),
+  priceUsd: z.number().int().min(0).max(1000000).nullable().default(null),
   image: z.string().trim().max(2000).default(""),
   alt: z.string().trim().max(300).default(""),
   category: z.string().trim().max(80).default("Safari Packages"),
@@ -301,6 +303,7 @@ export const saveTour = createServerFn({ method: "POST" })
       title: data.title,
       tagline: data.tagline,
       duration: data.duration,
+      price_usd: data.priceUsd,
       image_url: data.image,
       image_alt: data.alt,
       category: data.category,

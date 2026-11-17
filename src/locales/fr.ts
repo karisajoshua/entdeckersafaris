@@ -98,6 +98,8 @@ Object.assign(fr, {
   "Discover the untamed beauty of Africa through our meticulously crafted itineraries. From the bustling streets of Nairobi to the vast plains of the Masai Mara, every journey is an invitation to explore.":
     "Découvrez la beauté sauvage de l'Afrique à travers nos itinéraires méticuleusement conçus. Des rues animées de Nairobi aux vastes plaines du Masai Mara, chaque voyage est une invitation à explorer.",
   "View Itinerary": "Voir l'itinéraire",
+  From: "À partir de",
+  "per person": "par personne",
   "The Itinerary": "L'itinéraire",
   "Ready to tailor this itinerary?": "Envie de personnaliser cet itinéraire ?",
   "Every journey is flexible — tell us your dates, budget and interests and we will adapt it to you.":

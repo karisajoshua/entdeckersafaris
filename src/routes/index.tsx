@@ -150,7 +150,12 @@ function Index() {
                     <h3 className="mb-2 text-headline-md text-deep-forest transition-colors group-hover:text-savannah-gold">
                       {tour.title}
                     </h3>
-                    <p className="mb-6 text-body-md text-on-surface-variant">{tour.tagline}</p>
+                    <p className="mb-4 text-body-md text-on-surface-variant">{tour.tagline}</p>
+                    {tour.priceUsd != null && (
+                      <p className="label mb-6 text-savannah-gold">
+                        {t("From")} ${tour.priceUsd.toLocaleString("en-US")} {t("per person")}
+                      </p>
+                    )}
                     <Link
                       to="/tours/$slug"
                       params={{ slug: tour.slug }}

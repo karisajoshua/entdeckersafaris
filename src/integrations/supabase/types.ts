@@ -206,6 +206,7 @@ export type Database = {
           image_url: string
           intro: Json
           itinerary: Json
+          price_usd: number | null
           published: boolean
           slug: string
           sort_order: number
@@ -222,6 +223,7 @@ export type Database = {
           image_url?: string
           intro?: Json
           itinerary?: Json
+          price_usd?: number | null
           published?: boolean
           slug: string
           sort_order?: number
@@ -238,6 +240,7 @@ export type Database = {
           image_url?: string
           intro?: Json
           itinerary?: Json
+          price_usd?: number | null
           published?: boolean
           slug?: string
           sort_order?: number

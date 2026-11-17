@@ -98,9 +98,14 @@ export function TourListing({ kind, heading, intro }: { kind: "day" | "safari"; 
                     </div>
                     <div className="flex grow flex-col p-8">
                       <h3 className="mb-4 text-headline-md text-deep-forest">{tour.title}</h3>
-                      <p className="mb-8 grow text-body-md text-on-surface-variant">
+                      <p className="mb-4 grow text-body-md text-on-surface-variant">
                         {tour.tagline}
                       </p>
+                      {tour.priceUsd != null && (
+                        <p className="label mb-6 text-savannah-gold">
+                          {t("From")} ${tour.priceUsd.toLocaleString("en-US")} {t("per person")}
+                        </p>
+                      )}
                       <Link
                         to="/tours/$slug"
                         params={{ slug: tour.slug }}
