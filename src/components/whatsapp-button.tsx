@@ -1,3 +1,4 @@
+import { useLocation } from "@tanstack/react-router";
 export const WHATSAPP_NUMBER = "254721886882";
 
 export function whatsappLink(message: string) {
@@ -5,9 +6,12 @@ export function whatsappLink(message: string) {
 }
 
 export function WhatsAppButton() {
+  const pathname = useLocation({ select: (l) => l.pathname });
   const href = whatsappLink(
     "Hello Entdecker Safaris! I'd like to enquire about your tours and safaris.",
   );
+
+  if (pathname.startsWith("/admin")) return null;
 
   return (
     <a

@@ -150,13 +150,16 @@ export function SiteHeader() {
 
       {open && (
         <nav className="flex flex-col gap-1 border-t border-deep-forest/10 bg-surface px-gutter py-4 lg:hidden">
+          <Link to="/" onClick={() => setOpen(false)} className="label py-3 text-on-surface-variant" activeOptions={{ exact: true }} activeProps={{ className: "label py-3 text-savannah-gold" }}>
+            {t("Home")}
+          </Link>
           <span className="label pt-3 text-on-surface-variant/70">{t("Tour Packages")}</span>
           {tourLinks.map((link) => (
             <Link key={link.to} to={link.to} onClick={() => setOpen(false)} className="label py-3 pl-4 text-on-surface-variant" activeProps={{ className: "label py-3 pl-4 text-savannah-gold" }}>
               {t(link.label)}
             </Link>
           ))}
-          {links.map((link) => (
+          {links.slice(1).map((link) => (
             <Link
               key={link.to}
               to={link.to}
