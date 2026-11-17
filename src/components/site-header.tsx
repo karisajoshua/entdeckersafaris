@@ -8,11 +8,15 @@ import logo from "../assets/entdecker-badge.png.asset.json";
 
 const links = [
   { to: "/", label: "Home" },
-  { to: "/tour-packages", label: "Tour Packages" },
   { to: "/gallery", label: "Gallery" },
   { to: "/blog", label: "Blog" },
   { to: "/about", label: "About Us" },
   { to: "/contact", label: "Contact" },
+] as const;
+
+const tourLinks = [
+  { to: "/day-tours", label: "Day Tours & Excursions" },
+  { to: "/safaris", label: "Safaris" },
 ] as const;
 
 
@@ -46,8 +50,26 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex">
+          <Link to="/" className="label pb-1 text-on-surface-variant transition-colors duration-300 hover:text-savannah-gold" activeOptions={{ exact: true }} activeProps={{ className: "label pb-1 text-savannah-gold border-b border-savannah-gold" }}>
+            {t("Home")}
+          </Link>
+          <div className="group relative">
+            <button type="button" className="label flex items-center gap-1 pb-1 text-on-surface-variant transition-colors hover:text-savannah-gold">
+              {t("Tour Packages")}
+              <span className="material-symbols-outlined text-[18px]">expand_more</span>
+            </button>
+            <div className="invisible absolute left-0 top-full z-50 min-w-60 pt-3 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+              <div className="flex flex-col rounded-sm border border-savannah-gold/30 bg-surface p-2 shadow-editorial">
+                {tourLinks.map((link) => (
+                  <Link key={link.to} to={link.to} className="label rounded-sm px-4 py-3 text-on-surface-variant hover:bg-surface-container-lowest hover:text-savannah-gold" activeProps={{ className: "label rounded-sm px-4 py-3 text-savannah-gold" }}>
+                    {t(link.label)}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
 
-          {links.map((link) => (
+          {links.slice(1).map((link) => (
             <Link
               key={link.to}
               to={link.to}
@@ -128,6 +150,12 @@ export function SiteHeader() {
 
       {open && (
         <nav className="flex flex-col gap-1 border-t border-deep-forest/10 bg-surface px-gutter py-4 lg:hidden">
+          <span className="label pt-3 text-on-surface-variant/70">{t("Tour Packages")}</span>
+          {tourLinks.map((link) => (
+            <Link key={link.to} to={link.to} onClick={() => setOpen(false)} className="label py-3 pl-4 text-on-surface-variant" activeProps={{ className: "label py-3 pl-4 text-savannah-gold" }}>
+              {t(link.label)}
+            </Link>
+          ))}
           {links.map((link) => (
             <Link
               key={link.to}

@@ -67,7 +67,7 @@ export function SiteFooter() {
           <ul className="space-y-4 text-body-md">
             <li>
               <Link
-                to="/tour-packages"
+                to="/safaris"
                 className="text-surface-variant/70 transition-colors duration-200 hover:text-savannah-gold"
               >
                 {t("Tour Packages")}

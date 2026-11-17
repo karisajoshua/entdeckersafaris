@@ -15,8 +15,10 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DayToursRouteImport } from './routes/day-tours'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as SafarisRouteImport } from './routes/safaris'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TourPackagesRouteImport } from './routes/tour-packages'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -57,6 +59,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DayToursRoute = DayToursRouteImport.update({
+  id: '/day-tours',
+  path: '/day-tours',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GalleryRoute = GalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
@@ -65,6 +72,11 @@ const GalleryRoute = GalleryRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SafarisRoute = SafarisRouteImport.update({
+  id: '/safaris',
+  path: '/safaris',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -126,8 +138,10 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
+  '/day-tours': typeof DayToursRoute
   '/gallery': typeof GalleryRoute
   '/privacy': typeof PrivacyRoute
+  '/safaris': typeof SafarisRoute
   '/terms': typeof TermsRoute
   '/tour-packages': typeof TourPackagesRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -145,8 +159,10 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
+  '/day-tours': typeof DayToursRoute
   '/gallery': typeof GalleryRoute
   '/privacy': typeof PrivacyRoute
+  '/safaris': typeof SafarisRoute
   '/terms': typeof TermsRoute
   '/tour-packages': typeof TourPackagesRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -165,8 +181,10 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
+  '/day-tours': typeof DayToursRoute
   '/gallery': typeof GalleryRoute
   '/privacy': typeof PrivacyRoute
+  '/safaris': typeof SafarisRoute
   '/terms': typeof TermsRoute
   '/tour-packages': typeof TourPackagesRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -186,8 +204,10 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog'
     | '/contact'
+    | '/day-tours'
     | '/gallery'
     | '/privacy'
+    | '/safaris'
     | '/terms'
     | '/tour-packages'
     | '/admin'
@@ -205,8 +225,10 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog'
     | '/contact'
+    | '/day-tours'
     | '/gallery'
     | '/privacy'
+    | '/safaris'
     | '/terms'
     | '/tour-packages'
     | '/blog/$slug'
@@ -224,8 +246,10 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog'
     | '/contact'
+    | '/day-tours'
     | '/gallery'
     | '/privacy'
+    | '/safaris'
     | '/terms'
     | '/tour-packages'
     | '/_authenticated/admin'
@@ -245,8 +269,10 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRouteWithChildren
   ContactRoute: typeof ContactRoute
+  DayToursRoute: typeof DayToursRoute
   GalleryRoute: typeof GalleryRoute
   PrivacyRoute: typeof PrivacyRoute
+  SafarisRoute: typeof SafarisRoute
   TermsRoute: typeof TermsRoute
   TourPackagesRoute: typeof TourPackagesRoute
   ToursSlugRoute: typeof ToursSlugRoute
@@ -296,6 +322,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/day-tours': {
+      id: '/day-tours'
+      path: '/day-tours'
+      fullPath: '/day-tours'
+      preLoaderRoute: typeof DayToursRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/gallery': {
       id: '/gallery'
       path: '/gallery'
@@ -308,6 +341,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/safaris': {
+      id: '/safaris'
+      path: '/safaris'
+      fullPath: '/safaris'
+      preLoaderRoute: typeof SafarisRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -430,8 +470,10 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BlogRoute: BlogRouteWithChildren,
   ContactRoute: ContactRoute,
+  DayToursRoute: DayToursRoute,
   GalleryRoute: GalleryRoute,
   PrivacyRoute: PrivacyRoute,
+  SafarisRoute: SafarisRoute,
   TermsRoute: TermsRoute,
   TourPackagesRoute: TourPackagesRoute,
   ToursSlugRoute: ToursSlugRoute,

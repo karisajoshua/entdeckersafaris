@@ -164,7 +164,7 @@ function About() {
         <section className="mx-auto max-w-(--container-max) px-gutter py-section-mobile text-center md:py-section-desktop">
           <h2 className="mb-6 text-headline-md text-deep-forest">{t("Ready to explore?")}</h2>
           <Link
-            to="/tour-packages"
+            to="/safaris"
             className="label inline-block rounded-sm bg-deep-forest px-8 py-4 text-horizon-sand shadow-editorial transition-all hover:-translate-y-1"
           >
             {t("View Tour Packages")}

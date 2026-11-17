@@ -50,7 +50,7 @@ function TourNotFound() {
           The itinerary you're looking for isn't available.
         </p>
         <Link
-          to="/tour-packages"
+          to="/safaris"
           className="label rounded-sm bg-deep-forest px-8 py-4 text-horizon-sand shadow-editorial"
         >
           Browse all tours

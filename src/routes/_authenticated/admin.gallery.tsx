@@ -306,15 +306,16 @@ function AdminGallery() {
                 <button
                   type="button"
                   className={ghostButton}
-                  onClick={() =>
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
                     setLocationForm({
                       id: location.id,
                       slug: location.slug,
                       name: location.name,
                       blurb: location.blurb ?? "",
                       sortOrder: location.sortOrder,
-                    })
-                  }
+                    });
+                  }}
                 >
                   Edit
                 </button>

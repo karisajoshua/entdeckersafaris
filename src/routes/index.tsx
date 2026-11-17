@@ -69,7 +69,7 @@ function Index() {
               {t("Experience the unique beauty of Kenya with personalized luxury safaris.")}
             </p>
             <Link
-              to="/tour-packages"
+              to="/safaris"
               className="label rounded-sm bg-deep-forest px-8 py-4 text-horizon-sand shadow-editorial transition-all duration-300 hover:-translate-y-1 hover:opacity-90"
             >
               {t("Start Your Journey")}
@@ -118,7 +118,7 @@ function Index() {
                 {t("Featured Safaris")}
               </h2>
               <Link
-                to="/tour-packages"
+                to="/safaris"
                 className="label hidden items-center gap-2 text-deep-forest transition-colors hover:text-savannah-gold md:inline-flex"
               >
                 {t("View All Tours")}

@@ -122,4 +122,7 @@ Object.assign(fr, {
   "Your phone number": "Votre numéro de téléphone",
   "Tell us about your dream safari...": "Parlez-nous du safari dont vous rêvez...",
   "Thank you — we'll be in touch shortly.": "Merci — nous vous répondrons très vite.",
+  "Safaris": "Safaris",
+  "Short, unforgettable experiences — from Nairobi's wildlife sanctuaries and Mombasa's ancient streets to lakes, rivers and Maasai culture.": "Des expériences courtes et inoubliables — des sanctuaires de Nairobi et des rues anciennes de Mombasa aux lacs, rivières et à la culture maasaï.",
+  "Discover the untamed beauty of Africa through our meticulously crafted itineraries. From the vast plains of the Masai Mara to Zanzibar's shores and the summit of Kilimanjaro, every journey is an invitation to explore.": "Découvrez la beauté sauvage de l'Afrique à travers nos itinéraires soigneusement conçus. Des vastes plaines du Masai Mara aux rivages de Zanzibar et au sommet du Kilimandjaro, chaque voyage est une invitation à explorer.",
 });

@@ -359,7 +359,7 @@ function AdminTours() {
               Published
             </label>
 
-            <div className="flex gap-3 md:col-span-2">
+            <div className="sticky bottom-0 z-10 -mx-6 -mb-6 flex gap-3 border-t border-deep-forest/10 bg-surface-container-lowest px-6 py-4 md:col-span-2">
               <button type="submit" className={primaryButton} disabled={saveMutation.isPending}>
                 Save tour
               </button>
@@ -390,7 +390,7 @@ function AdminTours() {
                 )}
               </div>
               <div className="flex flex-wrap gap-3">
-                <button type="button" className={ghostButton} onClick={() => setForm(toForm(tour))}>
+                <button type="button" className={ghostButton} onClick={() => { setForm(toForm(tour)); window.scrollTo({ top: 0, behavior: "smooth" }); }}>
                   Edit
                 </button>
                 <button

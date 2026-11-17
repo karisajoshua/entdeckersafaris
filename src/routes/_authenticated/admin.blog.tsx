@@ -308,7 +308,7 @@ function AdminBlog() {
               Published
             </label>
 
-            <div className="flex gap-3 md:col-span-2">
+            <div className="sticky bottom-0 z-10 -mx-6 -mb-6 flex gap-3 border-t border-deep-forest/10 bg-surface-container-lowest px-6 py-4 md:col-span-2">
               <button type="submit" className={primaryButton} disabled={saveMutation.isPending}>
                 Save article
               </button>
@@ -338,7 +338,7 @@ function AdminBlog() {
                 )}
               </div>
               <div className="flex flex-wrap gap-3">
-                <button type="button" className={ghostButton} onClick={() => setForm(toForm(post))}>
+                <button type="button" className={ghostButton} onClick={() => { setForm(toForm(post)); window.scrollTo({ top: 0, behavior: "smooth" }); }}>
                   Edit
                 </button>
                 <button
