@@ -63,7 +63,7 @@ export function ImageUpload({ value, onChange, label = "Image" }: Props) {
         </label>
       </div>
       <input
-        type="url"
+        type="text"
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder="…or paste an image URL"
