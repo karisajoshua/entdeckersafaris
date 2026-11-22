@@ -275,6 +275,11 @@ const stepSchema = z.object({
   marker: z.string().trim().min(1).max(80),
   heading: z.string().trim().min(1).max(200),
   body: z.string().trim().min(1).max(4000),
+  locationName: z.string().trim().max(200).optional(),
+  latitude: z.number().finite().min(-90).max(90).optional(),
+  longitude: z.number().finite().min(-180).max(180).optional(),
+}).refine((step) => (step.latitude === undefined) === (step.longitude === undefined), {
+  message: "Latitude and longitude must both be provided for a mapped stop.",
 });
 
 const tourSchema = z.object({
