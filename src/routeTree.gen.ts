@@ -26,6 +26,7 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ToursSlugRouteImport } from './routes/tours.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminBlogRouteImport } from './routes/_authenticated/admin.blog'
+import { Route as AuthenticatedAdminDestinationsRouteImport } from './routes/_authenticated/admin.destinations'
 import { Route as AuthenticatedAdminEnquiriesRouteImport } from './routes/_authenticated/admin.enquiries'
 import { Route as AuthenticatedAdminGalleryRouteImport } from './routes/_authenticated/admin.gallery'
 import { Route as AuthenticatedAdminToursRouteImport } from './routes/_authenticated/admin.tours'
@@ -114,6 +115,12 @@ const AuthenticatedAdminBlogRoute = AuthenticatedAdminBlogRouteImport.update({
   path: '/blog',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminDestinationsRoute =
+  AuthenticatedAdminDestinationsRouteImport.update({
+    id: '/destinations',
+    path: '/destinations',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminEnquiriesRoute =
   AuthenticatedAdminEnquiriesRouteImport.update({
     id: '/enquiries',
@@ -148,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/tours/$slug': typeof ToursSlugRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
+  '/admin/destinations': typeof AuthenticatedAdminDestinationsRoute
   '/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
   '/admin/gallery': typeof AuthenticatedAdminGalleryRoute
   '/admin/tours': typeof AuthenticatedAdminToursRoute
@@ -168,6 +176,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/tours/$slug': typeof ToursSlugRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
+  '/admin/destinations': typeof AuthenticatedAdminDestinationsRoute
   '/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
   '/admin/gallery': typeof AuthenticatedAdminGalleryRoute
   '/admin/tours': typeof AuthenticatedAdminToursRoute
@@ -191,6 +200,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/tours/$slug': typeof ToursSlugRoute
   '/_authenticated/admin/blog': typeof AuthenticatedAdminBlogRoute
+  '/_authenticated/admin/destinations': typeof AuthenticatedAdminDestinationsRoute
   '/_authenticated/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
   '/_authenticated/admin/gallery': typeof AuthenticatedAdminGalleryRoute
   '/_authenticated/admin/tours': typeof AuthenticatedAdminToursRoute
@@ -214,6 +224,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/tours/$slug'
     | '/admin/blog'
+    | '/admin/destinations'
     | '/admin/enquiries'
     | '/admin/gallery'
     | '/admin/tours'
@@ -234,6 +245,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/tours/$slug'
     | '/admin/blog'
+    | '/admin/destinations'
     | '/admin/enquiries'
     | '/admin/gallery'
     | '/admin/tours'
@@ -256,6 +268,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/tours/$slug'
     | '/_authenticated/admin/blog'
+    | '/_authenticated/admin/destinations'
     | '/_authenticated/admin/enquiries'
     | '/_authenticated/admin/gallery'
     | '/_authenticated/admin/tours'
@@ -399,6 +412,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminBlogRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/destinations': {
+      id: '/_authenticated/admin/destinations'
+      path: '/destinations'
+      fullPath: '/admin/destinations'
+      preLoaderRoute: typeof AuthenticatedAdminDestinationsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/enquiries': {
       id: '/_authenticated/admin/enquiries'
       path: '/enquiries'
@@ -425,6 +445,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminBlogRoute: typeof AuthenticatedAdminBlogRoute
+  AuthenticatedAdminDestinationsRoute: typeof AuthenticatedAdminDestinationsRoute
   AuthenticatedAdminEnquiriesRoute: typeof AuthenticatedAdminEnquiriesRoute
   AuthenticatedAdminGalleryRoute: typeof AuthenticatedAdminGalleryRoute
   AuthenticatedAdminToursRoute: typeof AuthenticatedAdminToursRoute
@@ -433,6 +454,7 @@ interface AuthenticatedAdminRouteChildren {
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminBlogRoute: AuthenticatedAdminBlogRoute,
+  AuthenticatedAdminDestinationsRoute: AuthenticatedAdminDestinationsRoute,
   AuthenticatedAdminEnquiriesRoute: AuthenticatedAdminEnquiriesRoute,
   AuthenticatedAdminGalleryRoute: AuthenticatedAdminGalleryRoute,
   AuthenticatedAdminToursRoute: AuthenticatedAdminToursRoute,
