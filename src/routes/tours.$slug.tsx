@@ -241,6 +241,9 @@ function InteractiveItinerary({ steps }: { steps: MappedStep[] }) {
               </div>
               {routeUrl && <a href={routeUrl} target="_blank" rel="noopener noreferrer" className="label text-savannah-gold underline">View route ↗</a>}
             </div>
+            {mapped.length > 1 && (
+              <JourneyRoutePreview steps={mapped} selected={selected} />
+            )}
             {mapUrl ? (
               <iframe key={mapUrl} title={`Map for ${step.heading}`} src={mapUrl} loading="lazy"
                 referrerPolicy="no-referrer" className="h-[360px] w-full border-0 md:h-[480px]" />
@@ -256,5 +259,50 @@ function InteractiveItinerary({ steps }: { steps: MappedStep[] }) {
         </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * Geographic overview of the itinerary. Lines connect known coordinates in
+ * itinerary order; they are not road-routing instructions or travel estimates.
+ */
+function JourneyRoutePreview({ steps, selected }: {
+  steps: MappedStep[];
+  selected: MappedStep | undefined;
+}) {
+  const longitudes = steps.map((step) => step.longitude!);
+  const latitudes = steps.map((step) => step.latitude!);
+  const minLon = Math.min(...longitudes);
+  const maxLon = Math.max(...longitudes);
+  const minLat = Math.min(...latitudes);
+  const maxLat = Math.max(...latitudes);
+  const lonSpan = Math.max(maxLon - minLon, 0.05);
+  const latSpan = Math.max(maxLat - minLat, 0.05);
+  const x = (step: MappedStep) => 28 + ((step.longitude! - minLon) / lonSpan) * 344;
+  const y = (step: MappedStep) => 222 - ((step.latitude! - minLat) / latSpan) * 184;
+  const points = steps.map((step) => `${x(step)},${y(step)}`).join(" ");
+  const activeIndex = selected ? steps.indexOf(selected) : -1;
+
+  return (
+    <div className="border-b border-deep-forest/10 bg-surface-container-low px-5 py-4">
+      <p className="label mb-3 text-deep-forest">Journey overview · {steps.length} mapped stops</p>
+      <svg viewBox="0 0 400 250" role="img" aria-label="Geographic overview connecting the tour stops in visit order"
+        className="h-auto w-full rounded-md bg-[#e7eddf]">
+        <polyline points={points} fill="none" stroke="#315b45" strokeWidth="3"
+          strokeDasharray="7 5" strokeLinejoin="round" />
+        {steps.map((item, index) => (
+          <g key={index}>
+            <circle cx={x(item)} cy={y(item)} r={index === activeIndex ? 13 : 10}
+              fill={index === activeIndex ? "#c18a35" : "#315b45"} stroke="white" strokeWidth="2" />
+            <text x={x(item)} y={y(item) + 4} fill="white" textAnchor="middle"
+              fontSize="11" fontWeight="bold">{index + 1}</text>
+          </g>
+        ))}
+      </svg>
+      <p className="mt-2 text-xs text-on-surface-variant">
+        Indicative geographic overview only. Dotted lines connect destinations directly, not along roads.
+        The map below focuses on the selected destination.
+      </p>
+    </div>
   );
 }
