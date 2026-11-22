@@ -189,10 +189,8 @@ export const getTourBySlug = createServerFn({ method: "GET" })
     tour.itinerary = tour.itinerary.map((step) => {
       const destination = step.destinationId ? byId.get(step.destinationId) : undefined;
       if (!destination) return step;
-      return {
+      const merged: ItineraryStep = {
         ...step,
-        latitude: destination.latitude ?? undefined,
-        longitude: destination.longitude ?? undefined,
         locationName: destination.name,
         destination: {
           name: destination.name,
@@ -202,6 +200,9 @@ export const getTourBySlug = createServerFn({ method: "GET" })
           galleryImages: destination.gallery_images ?? [],
         },
       };
+      if (destination.latitude != null) merged.latitude = destination.latitude;
+      if (destination.longitude != null) merged.longitude = destination.longitude;
+      return merged;
     });
     return tour;
   });

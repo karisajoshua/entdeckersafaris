@@ -334,7 +334,10 @@ function AdminTours() {
                     <select className={`${inputClass} md:col-span-3`} aria-label={`Destination for stop ${index + 1}`}
                       value={step.destinationId ?? ""} onChange={(event) => {
                         const itinerary = [...form.itinerary];
-                        itinerary[index] = { ...step, destinationId: event.target.value || undefined };
+                        const nextStep = { ...step };
+                        if (event.target.value) nextStep.destinationId = event.target.value;
+                        else delete nextStep.destinationId;
+                        itinerary[index] = nextStep;
                         setForm({ ...form, itinerary });
                       }}>
                       <option value="">Custom stop (manual coordinates)</option>

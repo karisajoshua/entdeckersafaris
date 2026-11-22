@@ -211,11 +211,6 @@ export const savePost = createServerFn({ method: "POST" })
   .inputValidator((input) => postSchema.parse(input))
   .handler(async ({ context, data }) => {
     const db = await assertAdmin(context as unknown as AuthedContext);
-    const destinationIds = [...new Set(data.itinerary.map((step) => step.destinationId).filter((id): id is string => Boolean(id)))];
-    if (destinationIds.length) {
-      const { data: matches, error: destinationError } = await db.from("destinations").select("id").in("id", destinationIds);
-      if (destinationError || matches?.length !== destinationIds.length) throw new Error("One or more selected destinations no longer exist.");
-    }
     const row = {
       slug: data.slug,
       title: data.title,
@@ -309,6 +304,11 @@ export const saveTour = createServerFn({ method: "POST" })
   .inputValidator((input) => tourSchema.parse(input))
   .handler(async ({ context, data }) => {
     const db = await assertAdmin(context as unknown as AuthedContext);
+    const destinationIds = [...new Set(data.itinerary.map((step) => step.destinationId).filter((id): id is string => Boolean(id)))];
+    if (destinationIds.length) {
+      const { data: matches, error: destinationError } = await db.from("destinations").select("id").in("id", destinationIds);
+      if (destinationError || matches?.length !== destinationIds.length) throw new Error("One or more selected destinations no longer exist.");
+    }
     const row = {
       slug: data.slug,
       title: data.title,
