@@ -184,7 +184,7 @@ function TourDetail() {
   );
 }
 
-type MappedStep = { marker: string; heading: string; body: string; latitude?: number; longitude?: number; locationName?: string };
+type MappedStep = { marker: string; heading: string; body: string; latitude?: number; longitude?: number; locationName?: string; destination?: { name: string; description: string; highlights: string[]; heroImage: string; galleryImages: string[] } };
 
 function InteractiveItinerary({ steps }: { steps: MappedStep[] }) {
   const [active, setActive] = useState(0);
@@ -213,6 +213,13 @@ function InteractiveItinerary({ steps }: { steps: MappedStep[] }) {
             <p className="label mb-4 text-savannah-gold">Stop {active + 1} of {steps.length} · {step.marker}</p>
             <h3 className="mb-4 text-headline-md text-deep-forest">{step.heading}</h3>
             <p className="mb-8 whitespace-pre-line text-body-md text-on-surface-variant">{step.body}</p>
+            {step.destination && <div className="mb-8 border-t border-deep-forest/10 pt-5">
+              {step.destination.heroImage && <img src={step.destination.heroImage} alt={step.destination.name} loading="lazy" className="mb-4 h-48 w-full rounded-lg object-cover" />}
+              <h4 className="mb-2 text-lg font-semibold text-deep-forest">{step.destination.name}</h4>
+              {step.destination.description && <p className="text-body-md text-on-surface-variant">{step.destination.description}</p>}
+              {step.destination.highlights.length > 0 && <ul className="mt-3 list-disc pl-5 text-body-md text-on-surface-variant">{step.destination.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}</ul>}
+              {step.destination.galleryImages.length > 0 && <div className="mt-4 grid grid-cols-3 gap-2">{step.destination.galleryImages.slice(0, 3).filter(Boolean).map((photo) => <img key={photo} src={photo} alt={step.destination!.name} loading="lazy" className="h-24 w-full rounded object-cover" />)}</div>}
+            </div>}
             <div className="flex items-center justify-between gap-4">
               <button type="button" disabled={active === 0} onClick={() => setActive((n) => Math.max(0, n - 1))}
                 className="label rounded-sm border border-deep-forest/20 px-5 py-3 text-deep-forest disabled:cursor-not-allowed disabled:opacity-40">
