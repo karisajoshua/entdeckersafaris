@@ -159,8 +159,11 @@ export const listTours = createServerFn({ method: "GET" }).handler(async (): Pro
     .select(TOUR_COLUMNS)
     .eq("published", true)
     .order("sort_order");
-  if (error || !data) return [];
-  return data.map(mapTour);
+  if (error) {
+    console.error("Unable to load published tours:", error.message);
+    throw new Error("Tour packages could not be loaded. Please try again later.");
+  }
+  return (data ?? []).map(mapTour);
 });
 
 export const getTourBySlug = createServerFn({ method: "GET" })
