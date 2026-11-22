@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
@@ -150,28 +151,7 @@ function TourDetail() {
           </section>
         )}
 
-        <section className="bg-surface-container-low px-gutter py-section-mobile md:py-section-desktop">
-          <div className="mx-auto max-w-(--container-max)">
-            <Reveal>
-              <h2 className="mb-12 text-headline-md text-deep-forest md:text-headline-lg">
-                {t("The Itinerary")}
-              </h2>
-            </Reveal>
-
-            <ol className="relative max-w-3xl border-l border-deep-forest/15 pl-8">
-              {tour.itinerary.map((step, i) => (
-                <Reveal as="li" key={step.marker + i} delay={i * 60} className="relative pb-12 last:pb-0">
-                  <span className="absolute -left-[41px] mt-2 flex h-4 w-4 items-center justify-center rounded-full border border-savannah-gold bg-surface">
-                    <span className="h-1.5 w-1.5 rounded-full bg-savannah-gold" />
-                  </span>
-                  <p className="label mb-2 text-savannah-gold">{step.marker}</p>
-                  <h3 className="mb-3 text-headline-md text-deep-forest">{step.heading}</h3>
-                  <p className="text-body-md text-on-surface-variant">{step.body}</p>
-                </Reveal>
-              ))}
-            </ol>
-          </div>
-        </section>
+        <InteractiveItinerary steps={tour.itinerary} />
 
         <section className="mx-auto max-w-(--container-max) px-gutter py-section-mobile text-center md:py-section-desktop">
           <Reveal>
@@ -201,5 +181,80 @@ function TourDetail() {
 
       <SiteFooter />
     </div>
+  );
+}
+
+type MappedStep = { marker: string; heading: string; body: string; latitude?: number; longitude?: number; locationName?: string };
+
+function InteractiveItinerary({ steps }: { steps: MappedStep[] }) {
+  const [active, setActive] = useState(0);
+  const step = steps[active];
+  if (!step) return null;
+  const mapped = steps.filter((item) =>
+    typeof item.latitude === "number" && Number.isFinite(item.latitude) &&
+    typeof item.longitude === "number" && Number.isFinite(item.longitude) &&
+    Math.abs(item.latitude) <= 90 && Math.abs(item.longitude) <= 180,
+  );
+  const selected = typeof step.latitude === "number" && typeof step.longitude === "number"
+    ? step : mapped[0];
+  const mapUrl = selected
+    ? `https://www.openstreetmap.org/export/embed.html?bbox=${selected.longitude! - 0.12}%2C${selected.latitude! - 0.09}%2C${selected.longitude! + 0.12}%2C${selected.latitude! + 0.09}&layer=mapnik&marker=${selected.latitude}%2C${selected.longitude}`
+    : null;
+  const routeUrl = mapped.length > 1
+    ? `https://www.google.com/maps/dir/?api=1&origin=${mapped[0]!.latitude}%2C${mapped[0]!.longitude}&destination=${mapped[mapped.length - 1]!.latitude}%2C${mapped[mapped.length - 1]!.longitude}${mapped.length > 2 ? `&waypoints=${mapped.slice(1, -1).map((item) => `${item.latitude}%2C${item.longitude}`).join("%7C")}` : ""}&travelmode=driving`
+    : null;
+
+  return (
+    <section className="bg-surface-container-low px-gutter py-section-mobile md:py-section-desktop">
+      <div className="mx-auto max-w-(--container-max)">
+        <h2 className="mb-8 text-headline-md text-deep-forest md:text-headline-lg">Explore the itinerary</h2>
+        <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
+          <div className="rounded-lg border border-deep-forest/10 bg-surface p-6 md:p-8" aria-live="polite">
+            <p className="label mb-4 text-savannah-gold">Stop {active + 1} of {steps.length} · {step.marker}</p>
+            <h3 className="mb-4 text-headline-md text-deep-forest">{step.heading}</h3>
+            <p className="mb-8 whitespace-pre-line text-body-md text-on-surface-variant">{step.body}</p>
+            <div className="flex items-center justify-between gap-4">
+              <button type="button" disabled={active === 0} onClick={() => setActive((n) => Math.max(0, n - 1))}
+                className="label rounded-sm border border-deep-forest/20 px-5 py-3 text-deep-forest disabled:cursor-not-allowed disabled:opacity-40">
+                ← Previous
+              </button>
+              <button type="button" disabled={active === steps.length - 1} onClick={() => setActive((n) => Math.min(steps.length - 1, n + 1))}
+                className="label rounded-sm bg-deep-forest px-5 py-3 text-horizon-sand disabled:cursor-not-allowed disabled:opacity-40">
+                Next →
+              </button>
+            </div>
+            <div className="mt-6 flex flex-wrap gap-2" aria-label="Choose itinerary stop">
+              {steps.map((item, index) => (
+                <button key={index} type="button" onClick={() => setActive(index)} aria-label={`Show stop ${index + 1}: ${item.heading}`}
+                  aria-current={index === active ? "step" : undefined}
+                  className={`label h-9 min-w-9 rounded-full border px-2 ${index === active ? "border-deep-forest bg-deep-forest text-white" : "border-deep-forest/20 text-deep-forest"}`}>
+                  {index + 1}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="overflow-hidden rounded-lg border border-deep-forest/10 bg-surface">
+            <div className="flex items-center justify-between gap-3 px-5 py-4">
+              <div>
+                <p className="label text-deep-forest">Journey map</p>
+                <p className="text-body-md text-on-surface-variant">{selected?.locationName || (selected ? step.heading : "Location coordinates pending")}</p>
+              </div>
+              {routeUrl && <a href={routeUrl} target="_blank" rel="noopener noreferrer" className="label text-savannah-gold underline">View route ↗</a>}
+            </div>
+            {mapUrl ? (
+              <iframe key={mapUrl} title={`Map for ${step.heading}`} src={mapUrl} loading="lazy"
+                referrerPolicy="no-referrer" className="h-[360px] w-full border-0 md:h-[480px]" />
+            ) : (
+              <div className="flex h-[360px] items-center justify-center bg-surface-container-low px-8 text-center text-body-md text-on-surface-variant md:h-[480px]">
+                This tour's map will appear when its stops have been assigned geographic coordinates in the tour editor.
+              </div>
+            )}
+            <p className="px-5 py-3 text-body-md text-on-surface-variant">
+              Map highlights the selected stop. Open the route for road directions; actual travel may differ by itinerary.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

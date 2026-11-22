@@ -327,6 +327,24 @@ function AdminTours() {
                       setForm({ ...form, itinerary });
                     }}
                   />
+                  <div className="grid gap-2 md:col-span-4 md:grid-cols-3">
+                    <input className={inputClass} aria-label={`Location name for stop ${index + 1}`} placeholder="Location name (e.g. Lake Nakuru)"
+                      value={step.locationName ?? ""} onChange={(event) => {
+                        const itinerary = [...form.itinerary];
+                        itinerary[index] = { ...step, locationName: event.target.value };
+                        setForm({ ...form, itinerary });
+                      }} />
+                    {(["latitude", "longitude"] as const).map((axis) => (
+                      <input key={axis} className={inputClass} type="number" step="any"
+                        min={axis === "latitude" ? -90 : -180} max={axis === "latitude" ? 90 : 180}
+                        aria-label={`${axis} for stop ${index + 1}`} placeholder={axis === "latitude" ? "Latitude (-90 to 90)" : "Longitude (-180 to 180)"}
+                        value={step[axis] ?? ""} onChange={(event) => {
+                          const itinerary = [...form.itinerary];
+                          itinerary[index] = { ...step, [axis]: event.target.value === "" ? undefined : Number(event.target.value) };
+                          setForm({ ...form, itinerary });
+                        }} />
+                    ))}
+                  </div>
                   <button
                     type="button"
                     className={dangerButton}

@@ -70,6 +70,12 @@ export function TourListing({ kind, heading, intro }: { kind: "day" | "safari"; 
       </header>
 
       <main className="mx-auto w-full max-w-(--container-max) grow px-gutter pb-section-desktop">
+        {tours.length === 0 && (
+          <div className="rounded-lg border border-deep-forest/10 bg-surface-container-lowest px-8 py-16 text-center">
+            <h2 className="mb-4 text-headline-md text-deep-forest">No tour packages available</h2>
+            <p className="text-body-md text-on-surface-variant">Please check back soon or contact us to plan your journey.</p>
+          </div>
+        )}
         {categories.map((category) => (
           <section key={category} className="mb-20 last:mb-0">
             <Reveal>
