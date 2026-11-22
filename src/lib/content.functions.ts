@@ -176,7 +176,34 @@ export const getTourBySlug = createServerFn({ method: "GET" })
       .eq("published", true)
       .maybeSingle();
     if (error || !data) return null;
-    return mapTour(data);
+    const tour = mapTour(data);
+    const ids = [...new Set(tour.itinerary.map((step) => step.destinationId).filter((id): id is string => Boolean(id)))];
+    if (!ids.length) return tour;
+    // The tour is published; fetch only the destination profiles referenced by its stops.
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: destinations, error: destinationError } = await supabaseAdmin.from("destinations")
+      .select("id, name, description, highlights, latitude, longitude, hero_image, gallery_images")
+      .in("id", ids);
+    if (destinationError) throw new Error("Tour destination details could not be loaded.");
+    const byId = new Map((destinations ?? []).map((destination) => [destination.id, destination]));
+    tour.itinerary = tour.itinerary.map((step) => {
+      const destination = step.destinationId ? byId.get(step.destinationId) : undefined;
+      if (!destination) return step;
+      return {
+        ...step,
+        latitude: destination.latitude ?? undefined,
+        longitude: destination.longitude ?? undefined,
+        locationName: destination.name,
+        destination: {
+          name: destination.name,
+          description: destination.description,
+          highlights: destination.highlights ?? [],
+          heroImage: destination.hero_image,
+          galleryImages: destination.gallery_images ?? [],
+        },
+      };
+    });
+    return tour;
   });
 
 const enquirySchema = z.object({

@@ -211,6 +211,11 @@ export const savePost = createServerFn({ method: "POST" })
   .inputValidator((input) => postSchema.parse(input))
   .handler(async ({ context, data }) => {
     const db = await assertAdmin(context as unknown as AuthedContext);
+    const destinationIds = [...new Set(data.itinerary.map((step) => step.destinationId).filter((id): id is string => Boolean(id)))];
+    if (destinationIds.length) {
+      const { data: matches, error: destinationError } = await db.from("destinations").select("id").in("id", destinationIds);
+      if (destinationError || matches?.length !== destinationIds.length) throw new Error("One or more selected destinations no longer exist.");
+    }
     const row = {
       slug: data.slug,
       title: data.title,
@@ -276,6 +281,7 @@ const stepSchema = z.object({
   heading: z.string().trim().min(1).max(200),
   body: z.string().trim().min(1).max(4000),
   locationName: z.string().trim().max(200).optional(),
+  destinationId: z.string().uuid().optional(),
   latitude: z.number().finite().min(-90).max(90).optional(),
   longitude: z.number().finite().min(-180).max(180).optional(),
 }).refine((step) => (step.latitude === undefined) === (step.longitude === undefined), {

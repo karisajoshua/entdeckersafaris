@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { listAdminDestinations } from "../../lib/destinations.functions";
 import { adminListTours, deleteTour, saveTour } from "../../lib/admin.functions";
 import type { ItineraryStep, Tour } from "../../lib/content-types";
 import { suggestTourText } from "../../lib/ai-content.functions";
@@ -80,6 +81,8 @@ function toForm(tour: Tour): TourForm {
 function AdminTours() {
   const queryClient = useQueryClient();
   const list = useServerFn(adminListTours);
+  const listDestinations = useServerFn(listAdminDestinations);
+  const { data: destinations = [] } = useQuery({ queryKey: ["admin-destinations"], queryFn: () => listDestinations() });
   const save = useServerFn(saveTour);
   const remove = useServerFn(deleteTour);
 
@@ -328,6 +331,16 @@ function AdminTours() {
                     }}
                   />
                   <div className="grid gap-2 md:col-span-4 md:grid-cols-3">
+                    <select className={`${inputClass} md:col-span-3`} aria-label={`Destination for stop ${index + 1}`}
+                      value={step.destinationId ?? ""} onChange={(event) => {
+                        const itinerary = [...form.itinerary];
+                        itinerary[index] = { ...step, destinationId: event.target.value || undefined };
+                        setForm({ ...form, itinerary });
+                      }}>
+                      <option value="">Custom stop (manual coordinates)</option>
+                      {destinations.map((destination) => <option key={destination.id} value={destination.id}>{destination.name} — {destination.country}</option>)}
+                    </select>
+                    {step.destinationId && <p className="md:col-span-3 text-sm text-on-surface-variant">Coordinates, photographs and destination details are loaded automatically from the selected destination. Manual coordinates below are ignored for linked stops.</p>}
                     <input className={inputClass} aria-label={`Location name for stop ${index + 1}`} placeholder="Location name (e.g. Lake Nakuru)"
                       value={step.locationName ?? ""} onChange={(event) => {
                         const itinerary = [...form.itinerary];
