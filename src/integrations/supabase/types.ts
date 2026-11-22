@@ -125,6 +125,57 @@ export type Database = {
         }
         Relationships: []
       }
+      destinations: {
+        Row: {
+          country: string
+          created_at: string
+          description: string
+          gallery_images: string[]
+          hero_image: string
+          highlights: string[]
+          id: string
+          latitude: number | null
+          longitude: number | null
+          name: string
+          published: boolean
+          region: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          country?: string
+          created_at?: string
+          description?: string
+          gallery_images?: string[]
+          hero_image?: string
+          highlights?: string[]
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          published?: boolean
+          region?: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          country?: string
+          created_at?: string
+          description?: string
+          gallery_images?: string[]
+          hero_image?: string
+          highlights?: string[]
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          published?: boolean
+          region?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       gallery_locations: {
         Row: {
           blurb: string
