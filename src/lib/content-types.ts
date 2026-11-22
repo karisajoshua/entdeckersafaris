@@ -32,7 +32,7 @@ export type BlogPost = {
   sortOrder: number;
 };
 
-export type ItineraryStep = { marker: string; heading: string; body: string };
+export type ItineraryStep = { marker: string; heading: string; body: string; latitude?: number; longitude?: number; locationName?: string };
 
 export type Tour = {
   id: string;
