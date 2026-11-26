@@ -39,7 +39,7 @@ function CollectionsPage() {
             <div className="flex grow flex-col p-8"><h2 className="mb-3 text-headline-md text-deep-forest">{title}</h2>
               {tour && <><p className="label mb-3 text-savannah-gold">{tour.duration}</p><p className="mb-5 text-body-md text-on-surface-variant">{tour.tagline}</p></>}
               {!confirmed && <p className="mb-5 text-body-md text-on-surface-variant">Contact us to confirm the proposed package itinerary.</p>}
-              {tour && <p className="mb-4 text-sm text-on-surface-variant">{[...new Set(tour.itinerary.map(step => step.locationName).filter(Boolean))].slice(0,5).join(" · ") || tour.itinerary.slice(0,3).map(step => step.heading).join(" · ")}</p>}<Link to="/tours/$slug" params={{slug:item.slug}} className="label mt-auto text-savannah-gold">View Itinerary →</Link>
+              {tour && <p className="mb-4 text-sm text-on-surface-variant">{[...new Set(tour.itinerary.map(step => step.locationName).filter(Boolean))].slice(0,5).join(" · ") || tour.itinerary.slice(0,3).map(step => step.heading).join(" · ")}</p>}<Link to="/tours/$slug" params={{slug:item.slug}} className="label mt-auto text-savannah-gold">{confirmed ? "View Itinerary →" : "Enquire Now →"}</Link>
             </div>
           </article>;
         })}
