@@ -73,7 +73,7 @@ function TourNotFound() {
 
 function PackageDetail() {
   const data = Route.useLoaderData();
-  if (!data.tour) return <div className="flex min-h-screen flex-col bg-surface"><SiteHeader /><main className="mx-auto mt-32 w-full max-w-(--container-max) grow px-gutter py-section-mobile"><Link to="/tour-packages" search={{collection:data.category?.slug}} className="label text-savannah-gold">← {data.category?.name}</Link><h1 className="my-6 text-headline-lg text-deep-forest">{data.item?.name}</h1><p className="mb-8">The detailed itinerary is awaiting confirmation. Contact us to plan this journey.</p><Link to="/contact" className="label text-savannah-gold">Enquire about this safari →</Link></main><SiteFooter /></div>;
+  if (!data.tour || !data.confirmed) return <div className="flex min-h-screen flex-col bg-surface"><SiteHeader /><main className="mx-auto mt-32 w-full max-w-(--container-max) grow px-gutter py-section-mobile"><Link to="/tour-packages" search={{collection:data.category?.slug}} className="label text-savannah-gold">← {data.category?.name}</Link><h1 className="my-6 text-headline-lg text-deep-forest">{data.item?.name}</h1><p className="mb-8">The detailed itinerary is awaiting confirmation. Contact us to plan this journey.</p><a href={whatsappLink(`Hello Entdecker Safaris! I would like to enquire about ${data.item?.name ?? "this safari"}. Please share the itinerary, availability and pricing.`)} target="_blank" rel="noopener noreferrer" className="label inline-block rounded-sm bg-deep-forest px-8 py-4 text-horizon-sand">Enquire Now →</a></main><SiteFooter /></div>;
   return <TourDetail key={data.item?.slug ?? data.tour.slug} />;
 }
 
