@@ -5,7 +5,8 @@ import { SiteFooter } from "../components/site-footer";
 import { Reveal } from "../components/reveal";
 import { useT } from "../lib/i18n";
 import { useTranslatedTour } from "../lib/use-translated-content";
-import { tourQuery } from "../lib/queries";
+import { collections, findSource, durationMatches } from "../lib/collections";
+import { toursQuery, tourQuery } from "../lib/queries";
 import { whatsappLink } from "../components/whatsapp-button";
 import mara1 from "../assets/gallery/masai-mara-1.jpeg.asset.json";
 import mara3 from "../assets/gallery/masai-mara-3.jpeg.asset.json";
@@ -13,12 +14,20 @@ import mara8 from "../assets/gallery/masai-mara-8.jpeg.asset.json";
 
 export const Route = createFileRoute("/tours/$slug")({
   loader: async ({ context, params }) => {
+    const category = collections.find(c => c.packages.some(p => p.slug === params.slug));
+    const item = category?.packages.find(p => p.slug === params.slug);
+    if (item && category) {
+      const tours = await context.queryClient.ensureQueryData(toursQuery);
+      const source = findSource(tours, item);
+      const tour = source ? await context.queryClient.ensureQueryData(tourQuery(source.slug)) : null;
+      return { tour, item, category, confirmed: !!tour && durationMatches(tour, item.name) };
+    }
     const tour = await context.queryClient.ensureQueryData(tourQuery(params.slug));
     if (!tour) throw notFound();
-    return { tour };
+    return { tour, item: undefined, category: undefined, confirmed: true };
   },
   head: ({ loaderData }) => {
-    if (!loaderData) {
+    if (!loaderData?.tour) {
       return {
         meta: [{ title: "Tour unavailable — Entdecker Safaris" }, { name: "robots", content: "noindex" }],
       };
@@ -38,7 +47,7 @@ export const Route = createFileRoute("/tours/$slug")({
   },
   notFoundComponent: TourNotFound,
   errorComponent: TourNotFound,
-  component: TourDetail,
+  component: PackageDetail,
 });
 
 function TourNotFound() {
@@ -62,10 +71,17 @@ function TourNotFound() {
   );
 }
 
+function PackageDetail() {
+  const data = Route.useLoaderData();
+  if (!data.tour || !data.confirmed) return <div className="flex min-h-screen flex-col bg-surface"><SiteHeader /><main className="mx-auto mt-32 w-full max-w-(--container-max) grow px-gutter py-section-mobile"><Link to="/tour-packages" search={{collection:data.category?.slug}} className="label text-savannah-gold">← {data.category?.name}</Link><h1 className="my-6 text-headline-lg text-deep-forest">{data.item?.name}</h1><p className="mb-8">The detailed itinerary is awaiting confirmation. Contact us to plan this journey.</p><a href={whatsappLink(`Hello Entdecker Safaris! I would like to enquire about ${data.item?.name ?? "this safari"}. Please share the itinerary, availability and pricing.`)} target="_blank" rel="noopener noreferrer" className="label inline-block rounded-sm bg-deep-forest px-8 py-4 text-horizon-sand">Enquire Now →</a></main><SiteFooter /></div>;
+  return <TourDetail key={data.item?.slug ?? data.tour.slug} />;
+}
+
 function TourDetail() {
   const t = useT();
-  const { tour: rawTour } = Route.useLoaderData();
-  const tour = useTranslatedTour(rawTour) ?? rawTour;
+  const { tour: rawTour, item, category, confirmed } = Route.useLoaderData();
+  const sourceTour = rawTour!;
+  const tour = useTranslatedTour(sourceTour) ?? sourceTour;
   const includesMasaiMara = [
     tour.title,
     tour.tagline,
@@ -94,7 +110,7 @@ function TourDetail() {
             <span className="label mb-4 w-fit rounded-sm bg-savannah-gold px-3 py-1 text-deep-forest">
               {tour.duration}
             </span>
-            <h1 className="text-headline-lg text-horizon-sand md:text-display-xl">{tour.title}</h1>
+            <h1 className="text-headline-lg text-horizon-sand md:text-display-xl">{item?.name ?? tour.title}</h1>
             <p className="mt-4 max-w-xl text-body-lg text-horizon-sand/90">{tour.tagline}</p>
             {tour.priceUsd != null && (
               <p className="label mt-4 w-fit rounded-sm border border-savannah-gold/60 px-3 py-1 text-savannah-gold">
@@ -105,6 +121,8 @@ function TourDetail() {
         </section>
 
         <section className="mx-auto max-w-(--container-max) px-gutter py-section-mobile md:py-section-desktop">
+          {category && <nav aria-label="Breadcrumb" className="mb-6 flex flex-wrap gap-2 text-sm text-savannah-gold"><Link to="/tour-packages" search={{}}>Safari Escapes</Link><span>/</span><Link to="/tour-packages" search={{collection:category.slug}}>{category.name}</Link><span>/</span><span>{item?.name}</span></nav>}
+          {!confirmed && <p className="mb-6 rounded-lg border border-savannah-gold/40 p-4">Proposed package duration is awaiting confirmation. The existing {tour.duration} itinerary below is a reference only.</p>}
           <div className="max-w-3xl space-y-6">
             {tour.intro.map((paragraph, i) => (
               <Reveal key={i} delay={i * 80}>

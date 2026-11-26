@@ -14,8 +14,10 @@ const links = [
   { to: "/contact", label: "Contact" },
 ] as const;
 
+import { collections } from "../lib/collections";
+
 const tourLinks = [
-  { to: "/tour-packages", label: "All Tour Packages" },
+  { to: "/tour-packages", label: "Safari Escapes" },
   { to: "/day-tours", label: "Day Tours & Excursions" },
   { to: "/safaris", label: "Safaris" },
 ] as const;
@@ -59,14 +61,14 @@ export function SiteHeader() {
               {t("Tour Packages")}
               <span className="material-symbols-outlined text-[18px]">expand_more</span>
             </button>
-            <div className="invisible absolute left-0 top-full z-50 min-w-60 pt-3 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
-              <div className="flex flex-col rounded-sm border border-savannah-gold/30 bg-surface p-2 shadow-editorial">
+            <div className="invisible absolute left-0 top-full z-50 w-[min(720px,85vw)] -translate-x-1/4 pt-3 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+              <div className="rounded-sm border border-savannah-gold/30 bg-surface p-5 shadow-editorial"><Link to="/tour-packages" search={{}} className="label text-savannah-gold">Safari Escapes →</Link><div className="mt-4 grid grid-cols-2 gap-5">{collections.map(c => <div key={c.slug}><Link to="/tour-packages" search={{collection:c.slug}} className="font-semibold text-deep-forest">{c.name}</Link>{c.packages.map(p => <Link key={p.slug} to="/tours/$slug" params={{slug:p.slug}} className="block py-1 text-sm text-on-surface-variant hover:text-savannah-gold">{p.name}</Link>)}</div>)}</div><div className="mt-4 flex flex-wrap border-t border-deep-forest/10">
                 {tourLinks.map((link) => (
                   <Link key={link.to} to={link.to} className="label rounded-sm px-4 py-3 text-on-surface-variant hover:bg-surface-container-lowest hover:text-savannah-gold" activeProps={{ className: "label rounded-sm px-4 py-3 text-savannah-gold" }}>
                     {t(link.label)}
                   </Link>
                 ))}
-              </div>
+              </div></div>
             </div>
           </div>
 
@@ -150,11 +152,12 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <nav className="flex flex-col gap-1 border-t border-deep-forest/10 bg-surface px-gutter py-4 lg:hidden">
+        <nav className="flex flex-col gap-1 max-h-[75vh] overflow-y-auto border-t border-deep-forest/10 bg-surface px-gutter py-4 lg:hidden">
           <Link to="/" onClick={() => setOpen(false)} className="label py-3 text-on-surface-variant" activeOptions={{ exact: true }} activeProps={{ className: "label py-3 text-savannah-gold" }}>
             {t("Home")}
           </Link>
           <span className="label pt-3 text-on-surface-variant/70">{t("Tour Packages")}</span>
+          {collections.map(c => <div key={c.slug} className="pl-4"><Link to="/tour-packages" search={{collection:c.slug}} onClick={() => setOpen(false)} className="block py-2 font-semibold text-deep-forest">{c.name}</Link>{c.packages.map(p => <Link key={p.slug} to="/tours/$slug" params={{slug:p.slug}} onClick={() => setOpen(false)} className="block py-2 pl-4 text-sm">{p.name}</Link>)}</div>)}
           {tourLinks.map((link) => (
             <Link key={link.to} to={link.to} onClick={() => setOpen(false)} className="label py-3 pl-4 text-on-surface-variant" activeProps={{ className: "label py-3 pl-4 text-savannah-gold" }}>
               {t(link.label)}
