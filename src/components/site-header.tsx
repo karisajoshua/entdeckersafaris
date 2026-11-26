@@ -15,6 +15,7 @@ const links = [
 ] as const;
 
 const tourLinks = [
+  { to: "/tour-packages", label: "All Tour Packages" },
   { to: "/day-tours", label: "Day Tours & Excursions" },
   { to: "/safaris", label: "Safaris" },
 ] as const;
