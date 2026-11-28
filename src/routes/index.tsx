@@ -7,10 +7,8 @@ import heroImg from "../assets/hero-savannah.jpg";
 import featureImg from "../assets/feature-nairobi-park.jpg";
 import { Reveal } from "../components/reveal";
 import { useT } from "../lib/i18n";
-import { useTranslatedTours } from "../lib/use-translated-content";
-import mara1 from "../assets/gallery/masai-mara-1.jpeg.asset.json";
-import mara7 from "../assets/gallery/masai-mara-7.jpeg.asset.json";
-import mara9 from "../assets/gallery/masai-mara-9.jpeg.asset.json";
+import { collections, findSource, durationMatches } from "../lib/collections";
+import { whatsappLink } from "../components/whatsapp-button";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -44,10 +42,9 @@ const stats = [
 function Index() {
   const t = useT();
   const { data: rawTours } = useSuspenseQuery(toursQuery);
-  const tours = useTranslatedTours(rawTours);
-  const featured = tours.filter((t) =>
-    ["nairobi-city-tour", "8-days-kenya-experience"].includes(t.slug),
-  );
+  const packageItem = collections[0]!.packages[0]!;
+  const tour = findSource(rawTours, packageItem);
+  const confirmed = !!tour && durationMatches(tour, packageItem.name);
 
   return (
     <div className="min-h-screen bg-background">
@@ -69,7 +66,7 @@ function Index() {
               {t("Experience the unique beauty of Kenya with personalized luxury safaris.")}
             </p>
             <Link
-              to="/safaris"
+              to="/tour-packages"
               className="label rounded-sm bg-deep-forest px-8 py-4 text-horizon-sand shadow-editorial transition-all duration-300 hover:-translate-y-1 hover:opacity-90"
             >
               {t("Start Your Journey")}
@@ -118,7 +115,7 @@ function Index() {
                 {t("Featured Safaris")}
               </h2>
               <Link
-                to="/safaris"
+                to="/tour-packages"
                 className="label hidden items-center gap-2 text-deep-forest transition-colors hover:text-savannah-gold md:inline-flex"
               >
                 {t("View All Tours")}
@@ -126,85 +123,34 @@ function Index() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-              {featured.map((tour, i) => (
-                <Reveal
-                  key={tour.slug}
-                  delay={i * 90}
-                  className="group relative overflow-hidden rounded-lg border border-deep-forest/10 bg-surface transition-all duration-300 hover:shadow-editorial"
-                >
-                  <div className="relative h-[300px] w-full overflow-hidden">
-                    <img
-                      className="h-full w-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
-                      alt={tour.alt}
-                      src={tour.image}
-                      width={1024}
-                      height={768}
-                      loading="lazy"
-                    />
-                    <div className="absolute right-4 top-4 rounded-sm border border-deep-forest/10 bg-surface/90 px-3 py-1 backdrop-blur-sm">
-                      <span className="label text-deep-forest">{tour.duration}</span>
-                    </div>
-                  </div>
-                  <div className="p-8">
-                    <h3 className="mb-2 text-headline-md text-deep-forest transition-colors group-hover:text-savannah-gold">
-                      {tour.title}
-                    </h3>
-                    <p className="mb-4 text-body-md text-on-surface-variant">{tour.tagline}</p>
-                    {tour.priceUsd != null && (
-                      <p className="label mb-6 text-savannah-gold">
-                        {t("From")} ${tour.priceUsd.toLocaleString("en-US")} {t("per person")}
-                      </p>
-                    )}
-                    <Link
-                      to="/tours/$slug"
-                      params={{ slug: tour.slug }}
-                      className="label block w-full rounded-sm border border-savannah-gold py-3 text-center text-savannah-gold transition-colors duration-300 hover:bg-savannah-gold hover:text-surface"
-                    >
-                      {t("Explore Details")}
-                    </Link>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
+            <Reveal className="group grid overflow-hidden rounded-lg border border-deep-forest/10 bg-surface shadow-editorial md:grid-cols-2">
+              <div className="relative min-h-[280px] overflow-hidden md:min-h-[380px]">
+                <img src={tour?.image || heroImg} alt={tour?.alt || "African savannah"} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              </div>
+              <div className="flex flex-col justify-center p-8 md:p-12">
+                <span className="label mb-4 text-savannah-gold">Exclusive Safari Escapes · 10 Days</span>
+                <h3 className="mb-4 text-headline-lg text-deep-forest">{packageItem.name}</h3>
+                <p className="mb-6 text-body-md text-on-surface-variant">{confirmed ? tour?.tagline : "Discover our exclusive Out of Africa safari. Contact us for the detailed itinerary, availability and pricing."}</p>
+                {confirmed ? <Link to="/tours/$slug" params={{slug:packageItem.slug}} className="label w-fit rounded-sm bg-deep-forest px-8 py-4 text-horizon-sand">View Itinerary</Link> : <a href={whatsappLink("Hello Entdecker Safaris! I would like to enquire about 10 Days Out of Africa. Please share the itinerary, availability and pricing.")} target="_blank" rel="noopener noreferrer" className="label w-fit rounded-sm bg-deep-forest px-8 py-4 text-horizon-sand">Enquire Now</a>}
+              </div>
+            </Reveal>
           </div>
         </section>
 
         {/* Standard */}
         <section className="mx-auto max-w-(--container-max) border-t border-deep-forest/10 px-gutter py-section-mobile md:py-section-desktop">
-          <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-            <Reveal className="grid h-[420px] grid-cols-2 grid-rows-2 gap-3 md:h-[520px]">
-              <img
-                src={mara1.url}
-                alt="Maasai giraffe standing in golden savannah grass"
-                loading="lazy"
-                className="row-span-2 h-full w-full rounded-lg object-cover"
-              />
-              <img
-                src={mara7.url}
-                alt="Wildebeest descending a riverbank during the Great Migration"
-                loading="lazy"
-                className="h-full w-full rounded-lg object-cover"
-              />
-              <img
-                src={mara9.url}
-                alt="Wildebeest moving across the open Masai Mara plains"
-                loading="lazy"
-                className="h-full w-full rounded-lg object-cover"
-              />
-            </Reveal>
-
+          <div className="mx-auto max-w-5xl">
             <div>
-              <h2 className="mb-6 text-center text-headline-md text-deep-forest lg:text-left">
+              <h2 className="mb-6 text-center text-headline-md text-deep-forest">
                 {t("The Entdecker Standard")}
               </h2>
-              <div className="gold-rule mb-12 lg:justify-start" aria-hidden="true">
+              <div className="gold-rule mb-12 justify-center" aria-hidden="true">
                 <span />
               </div>
 
-              <div className="grid grid-cols-2 gap-x-6 gap-y-10 text-center lg:text-left">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-10 text-center md:grid-cols-4">
                 {stats.map((stat, i) => (
-                  <Reveal key={stat.label} delay={i * 80} className="flex flex-col items-center lg:items-start">
+                  <Reveal key={stat.label} delay={i * 80} className="flex flex-col items-center">
                     <span className="material-symbols-outlined mb-4 text-[40px] text-savannah-gold">
                       {stat.icon}
                     </span>
