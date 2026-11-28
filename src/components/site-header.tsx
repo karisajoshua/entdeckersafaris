@@ -16,7 +16,13 @@ const links = [
 
 import { collections } from "../lib/collections";
 import { toursQuery } from "../lib/queries";
-const kenyaDaySlugs = new Set(["nairobi-city-tour","mombasa-city-tour","lake-naivasha-experience","sagana-river-experience","loita-experience"]);
+const kenyaExcursions = [
+  {slug:"nairobi-city-tour",title:"Nairobi City Tour"},
+  {slug:"mombasa-city-tour",title:"Mombasa City Tour"},
+  {slug:"lake-naivasha-experience",title:"Lake Naivasha Experience"},
+  {slug:"sagana-river-experience",title:"Sagana River Experience"},
+  {slug:"loita-experience",title:"Loita Experience"},
+];
 const countries = ["Kenya", "Tanzania"] as const;
 
 
@@ -28,7 +34,13 @@ export function SiteHeader() {
   const [branch, setBranch] = useState<"safari" | "day">("safari");
   const { data: availableTours } = useQuery(toursQuery);
   const dayTours = (availableTours ?? []).filter(t => t.category === "Day Tours & Excursions");
-  const countryTours = (country: string) => dayTours.filter(t => country === "Kenya" ? kenyaDaySlugs.has(t.slug) || /\bkenya\b/i.test(t.title + " " + t.slug) : /\b(tanzania|zanzibar|arusha|moshi)\b/i.test(t.title + " " + t.slug));
+  const countryTours = (country: string): {slug:string;title:string}[] => {
+    if (country === "Kenya") {
+      const known = kenyaExcursions.map(item => (availableTours ?? []).find(t => t.slug === item.slug) ?? item);
+      return [...known, ...dayTours.filter(t => /\bkenya\b/i.test(t.title + " " + t.slug) && !known.some(item => item.slug === t.slug))];
+    }
+    return dayTours.filter(t => /\b(tanzania|zanzibar|arusha|moshi)\b/i.test(t.title + " " + t.slug));
+  };
   const desktopMenu = useRef<HTMLDivElement>(null);
   const desktopTrigger = useRef<HTMLButtonElement>(null);
   const closeTours = () => { setToursOpen(false); setActiveCategory(null); setBranch("safari"); };
