@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/use-session";
 import { useI18n, LANGS, LANG_LABELS } from "@/lib/i18n";
@@ -15,6 +15,9 @@ const links = [
 ] as const;
 
 import { collections } from "../lib/collections";
+import { toursQuery } from "../lib/queries";
+const kenyaDaySlugs = new Set(["nairobi-city-tour","mombasa-city-tour","lake-naivasha-experience","sagana-river-experience","loita-experience"]);
+const countries = ["Kenya", "Tanzania"] as const;
 
 
 
@@ -22,9 +25,13 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [toursOpen, setToursOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [branch, setBranch] = useState<"safari" | "day">("safari");
+  const { data: availableTours } = useQuery(toursQuery);
+  const dayTours = (availableTours ?? []).filter(t => t.category === "Day Tours & Excursions");
+  const countryTours = (country: string) => dayTours.filter(t => country === "Kenya" ? kenyaDaySlugs.has(t.slug) || /\bkenya\b/i.test(t.title + " " + t.slug) : /\b(tanzania|zanzibar|arusha|moshi)\b/i.test(t.title + " " + t.slug));
   const desktopMenu = useRef<HTMLDivElement>(null);
   const desktopTrigger = useRef<HTMLButtonElement>(null);
-  const closeTours = () => { setToursOpen(false); setActiveCategory(null); };
+  const closeTours = () => { setToursOpen(false); setActiveCategory(null); setBranch("safari"); };
   const closeMobile = () => { setOpen(false); closeTours(); };
   useEffect(() => {
     const onPointer = (event: PointerEvent) => { if (desktopMenu.current && !desktopMenu.current.contains(event.target as Node) && window.matchMedia("(min-width: 1024px)").matches) { setToursOpen(false); setActiveCategory(null); } };
@@ -69,17 +76,20 @@ export function SiteHeader() {
             </button>
             {toursOpen && <div id="desktop-tour-menu" className="absolute left-0 top-full z-50 w-[min(700px,85vw)] -translate-x-1/4 pt-4">
               <div className="overflow-hidden rounded-lg border border-savannah-gold/30 bg-surface shadow-editorial">
-                <Link to="/tour-packages" search={{}} onClick={closeTours} className="label block border-b border-deep-forest/10 px-6 py-4 text-savannah-gold">Safari Escapes →</Link>
+                <div className="grid grid-cols-2 border-b border-deep-forest/10">
+                  {(["safari","day"] as const).map(value => <button key={value} type="button" aria-pressed={branch === value} onClick={() => {setBranch(value);setActiveCategory(null);}} className={`label px-5 py-4 text-left ${branch === value ? "bg-deep-forest text-horizon-sand" : "text-deep-forest hover:bg-surface-container-low"}`}>{value === "safari" ? "Safari Escapes" : "Day Tours & Excursions"}</button>)}
+                </div>
                 <div className="grid grid-cols-[1fr_1.25fr]">
                   <div className="bg-surface-container-low p-3">
-                    {collections.map(c => <button key={c.slug} type="button" aria-expanded={activeCategory === c.slug} onClick={() => setActiveCategory(activeCategory === c.slug ? null : c.slug)} className={`flex w-full items-center justify-between gap-2 rounded px-4 py-4 text-left text-sm font-medium ${activeCategory === c.slug ? "bg-deep-forest text-horizon-sand" : "text-deep-forest hover:bg-surface"}`}>{c.name}<span aria-hidden="true" className="material-symbols-outlined text-lg">chevron_right</span></button>)}
+                    {(branch === "safari" ? collections.map(c => ({slug:c.slug,name:c.name})) : countries.map(c => ({slug:c,name:c}))).map(c => <button key={c.slug} type="button" aria-expanded={activeCategory === c.slug} onClick={() => setActiveCategory(activeCategory === c.slug ? null : c.slug)} className={`flex w-full items-center justify-between gap-2 rounded px-4 py-4 text-left text-sm font-medium ${activeCategory === c.slug ? "bg-deep-forest text-horizon-sand" : "text-deep-forest hover:bg-surface"}`}>{c.name}<span aria-hidden="true" className="material-symbols-outlined text-lg">chevron_right</span></button>)}
                   </div>
                   <div className="p-5">
-                    {collections.filter(c => c.slug === activeCategory).map(c => <div key={c.slug}><h3 className="mb-3 font-semibold text-deep-forest">{c.name}</h3>{c.packages.map(p => <Link key={p.slug} to="/tours/$slug" params={{slug:p.slug}} onClick={closeTours} className="block rounded px-2 py-3 text-sm text-on-surface-variant hover:bg-surface-container-low hover:text-savannah-gold">{p.name}</Link>)}<Link to="/tour-packages" search={{collection:c.slug}} onClick={closeTours} className="label mt-4 block text-savannah-gold">Explore category →</Link></div>)}
-                    {!activeCategory && <p className="p-4 text-sm text-on-surface-variant">Select a safari category to discover its journeys.</p>}
+                    {branch === "safari" && collections.filter(c => c.slug === activeCategory).map(c => <div key={c.slug}><h3 className="mb-3 font-semibold text-deep-forest">{c.name}</h3>{c.packages.map(p => <Link key={p.slug} to="/tours/$slug" params={{slug:p.slug}} onClick={closeTours} className="block rounded px-2 py-3 text-sm text-on-surface-variant hover:bg-surface-container-low hover:text-savannah-gold">{p.name}</Link>)}<Link to="/tour-packages" search={{collection:c.slug}} onClick={closeTours} className="label mt-4 block text-savannah-gold">Explore category →</Link></div>)}
+                    {branch === "day" && activeCategory && <div><h3 className="mb-3 font-semibold text-deep-forest">{activeCategory} Excursions</h3>{countryTours(activeCategory).map(p => <Link key={p.slug} to="/tours/$slug" params={{slug:p.slug}} onClick={closeTours} className="block rounded px-2 py-3 text-sm hover:bg-surface-container-low hover:text-savannah-gold">{p.title}</Link>)}{countryTours(activeCategory).length === 0 && <Link to="/contact" onClick={closeTours} className="block py-3 text-sm text-savannah-gold">Enquire about {activeCategory} excursions →</Link>}</div>}
+                    {!activeCategory && <p className="p-4 text-sm text-on-surface-variant">{branch === "safari" ? "Select a safari category to discover its journeys." : "Select a country to explore its excursions."}</p>}
                   </div>
                 </div>
-                <div className="flex flex-wrap gap-4 border-t border-deep-forest/10 px-6 py-4"><Link to="/day-tours" onClick={closeTours} className="label text-deep-forest hover:text-savannah-gold">Day Tours & Excursions</Link></div>
+                <div className="border-t border-deep-forest/10 px-6 py-4">{branch === "safari" ? <Link to="/tour-packages" search={{}} onClick={closeTours} className="label text-savannah-gold">View all Safari Escapes →</Link> : <Link to="/day-tours" onClick={closeTours} className="label text-savannah-gold">View all Day Tours →</Link>}</div>
               </div>
             </div>}
           </div>
@@ -171,9 +181,11 @@ export function SiteHeader() {
           </Link>
           <button type="button" aria-expanded={toursOpen} aria-controls="mobile-tour-menu" onClick={() => { if (toursOpen) closeTours(); else setToursOpen(true); }} className="label flex items-center justify-between py-3 text-left text-deep-forest">{t("Tour Packages")}<span aria-hidden="true" className="material-symbols-outlined">{toursOpen ? "expand_less" : "expand_more"}</span></button>
           {toursOpen && <div id="mobile-tour-menu" className="space-y-1 border-l border-savannah-gold/40 pl-3">
-            <Link to="/tour-packages" search={{}} onClick={closeMobile} className="label block py-3 text-savannah-gold">Safari Escapes →</Link>
-            {collections.map(c => <div key={c.slug}><button type="button" aria-expanded={activeCategory === c.slug} onClick={() => setActiveCategory(activeCategory === c.slug ? null : c.slug)} className="flex w-full items-center justify-between gap-2 py-3 text-left text-sm font-semibold text-deep-forest">{c.name}<span aria-hidden="true" className="material-symbols-outlined">{activeCategory === c.slug ? "expand_less" : "expand_more"}</span></button>{activeCategory === c.slug && <div className="space-y-1 border-l border-deep-forest/10 pl-4">{c.packages.map(p => <Link key={p.slug} to="/tours/$slug" params={{slug:p.slug}} onClick={closeMobile} className="block py-3 text-sm text-on-surface-variant">{p.name}</Link>)}<Link to="/tour-packages" search={{collection:c.slug}} onClick={closeMobile} className="label block py-3 text-savannah-gold">Explore category →</Link></div>}</div>)}
-            <Link to="/day-tours" onClick={closeMobile} className="label block py-3 text-deep-forest">Day Tours & Excursions</Link>
+            <button type="button" aria-expanded={branch === "safari"} onClick={() => {setBranch("safari");setActiveCategory(null);}} className="label block w-full py-3 text-left text-savannah-gold">Safari Escapes</button>
+            {branch === "safari" && collections.map(c => <div key={c.slug}><button type="button" aria-expanded={activeCategory === c.slug} onClick={() => setActiveCategory(activeCategory === c.slug ? null : c.slug)} className="flex w-full items-center justify-between gap-2 py-3 text-left text-sm font-semibold text-deep-forest">{c.name}<span aria-hidden="true" className="material-symbols-outlined">{activeCategory === c.slug ? "expand_less" : "expand_more"}</span></button>{activeCategory === c.slug && <div className="space-y-1 border-l border-deep-forest/10 pl-4">{c.packages.map(p => <Link key={p.slug} to="/tours/$slug" params={{slug:p.slug}} onClick={closeMobile} className="block py-3 text-sm text-on-surface-variant">{p.name}</Link>)}<Link to="/tour-packages" search={{collection:c.slug}} onClick={closeMobile} className="label block py-3 text-savannah-gold">Explore category →</Link></div>}</div>)}
+            <button type="button" aria-expanded={branch === "day"} onClick={() => {setBranch("day");setActiveCategory(null);}} className="label block w-full py-3 text-left text-deep-forest">Day Tours & Excursions</button>
+            {branch === "day" && <div className="pl-3">{countries.map(country => <div key={country}><button type="button" aria-expanded={activeCategory === country} onClick={() => setActiveCategory(activeCategory === country ? null : country)} className="flex w-full items-center justify-between py-3 text-sm font-semibold text-deep-forest">{country}<span className="material-symbols-outlined" aria-hidden="true">{activeCategory === country ? "expand_less" : "expand_more"}</span></button>{activeCategory === country && <div className="border-l border-deep-forest/10 pl-4">{countryTours(country).map(p => <Link key={p.slug} to="/tours/$slug" params={{slug:p.slug}} onClick={closeMobile} className="block py-3 text-sm">{p.title}</Link>)}{countryTours(country).length === 0 && <Link to="/contact" onClick={closeMobile} className="block py-3 text-sm text-savannah-gold">Enquire about {country} excursions →</Link>}</div>}</div>)}<Link to="/day-tours" onClick={closeMobile} className="label block py-3 text-savannah-gold">View all Day Tours →</Link></div>}
+            {branch === "safari" && <Link to="/tour-packages" search={{}} onClick={closeMobile} className="label block py-3 text-savannah-gold">View all Safari Escapes →</Link>}
           </div>}
           {links.slice(1).map((link) => (
             <Link
